@@ -1,42 +1,207 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Californitraining</title>
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 " />
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
+	<link rel="stylesheet" href="css/jquery.mobile.css" />
+	<link rel="stylesheet" href="themes/californitraining.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile.js"></script>
+
+	<script src="js/myscript.js"></script>
+	<link rel="stylesheet" href="css/mystyles.css" />
+	
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <script type="text/javascript" charset="utf-8" src="video.js"></script>
+<script type="text/javascript">
+    
+function init(){  
+    document.addEventListener("deviceready", console.log('ready'), true);
+}
+
+function playVideo(vidUrl) {
+    window.plugins.videoPlayer.play(vidUrl);
+}
+</script>  
+</head>
+<body >
+
+	<!-- Page: home -->
+	<div id="home"
+		data-role="page"
+		data-theme="a"
+		data-title="californitraining">
+	
+		<div data-theme="d" data-role="header">
+            <img id="californitraining"src="californitraining2.png" alt="californitraining"  width="300" height="45" /> 
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+     
+    
+
+
+			
+			
+		<!-- header -->
+	
+			
+			<div data-role="content"  >
+			
+			<a href="#popupLogin" data-rel="popup" data-position-to="window" data-role="button" data-inline="true"  data-theme="a"  class="ui-btn-right" data-transition="pop">Sign in</a>
+<div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input name="user" id="un" value="" placeholder="username" data-theme="a" type="text">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input name="pass" id="pw" value="" placeholder="password" data-theme="a" type="password">
+            <button type="submit" data-theme="b" data-icon="check">Sign in</button>
+        </div>
+    </form>
+</div>
+								
+			
+			
+			
+			<!-- home list -->
+					<ul data-role="listview"   data-inset="true"  data-divider-theme="d" >
+					<li data-role="list-divider">
+					<h2>Workout Plan For Women</h2>
+					
+					</li>
+					
+					<li data-theme="d">
+					<a href="toning.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album-bb3.jpg"/>
+					<h2>Toning & Losing 5lbs</h2>
+					<p>The easy way to lose weight and get tone</p></a>
+					</li>
+					
+					<li data-theme="d">
+					<a href="losing.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album-bb4.jpg"/>
+					<h2>Losing Weight</h2>
+					<p>Complete program for losing weight</p></a>
+					</li>
+					
+					
+					
+					<li data-theme="a">
+					<a href="abs.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album-bb6.jpg"/>
+					<h2>Abs</h2>
+					<p>Get amazing abs</p></a>
+					
+					<li data-theme="a">
+					<a href="glutes.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album-bb7.jpg"/>
+					<h2>Glutes & Hips.</h2>
+					<p>Either build, tone or reduce</p></a>
+					
+					
+					
+					<li data-theme="d">
+					<a href="bikini.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album-bb5.jpg"/>
+					<h2>Bikini Competitions</h2>
+					<p>Magazine Cover Girls workouts</p></a>
+					</li>
+					
+					<li data-theme="d">
+					   <a  href="Myfirst.html" rel="external"		
+						data-icon="arrow-r"
+						data-iconpos="right"
+						>
+						<img src="img/album-bb.jpg"/>
+						<h2>Home Workout Plan</h2>
+						<p>Great workouts at home or at the beach</p> </a>
+						
+					</li>
+					
+					<li data-theme="d">
+					<a href="skinny.html" rel="external"
+						data-icon="arrow-r"
+						data-iconpos="right"	
+					>
+					<img src="img/album-bb2.jpg" />
+					<h2>Plan For The Skinny</h2>
+					<p>Get some muscle or stay skinny proportionaly.</p></a>
+					</li>
+					
+					
+					<li data-theme="a">
+					<a href="intervals.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album_hiit50.jpg"/>
+					<h2>HIIT 50 Secs.</h2>
+					<p>High Intensity Interval Training. </p>
+					<p>The Best way to burn calories.</p> </a>
+					</li>
+					
+						<li data-theme="a">
+					<a href="intervals2.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album_hiit20.jpg"/>
+					<h2>HIIT 20 Secs.</h2>
+					<p>High Intensity Interval Training. </p>
+					<p>The Best way to burn calories.</p> </a>
+					</li>
+					
+						<li data-theme="a">
+					<a href="intervals3.html" rel="external" 
+						data-icon="arrow-r"
+						data-iconpos="right"
+					><img src="img/album_hiit20.jpg"/>
+					<h2>prueba.</h2>
+					<p>The best way to burn calories</p></a>
+					</li>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				
+							
+							
+					</ul>
+			
+			</div>
+		
+			
+							
+   
+		</div><!-- page -->
+			
+	
+	
+	
+	
+	
+								
+								
+	
+</body>
 </html>

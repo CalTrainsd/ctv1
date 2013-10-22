@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Californitraining</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 " />
+
+
+	<link rel="stylesheet" href="css/jquery.mobile.css" />
+	<link rel="stylesheet" href="themes/californitraining.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile.js"></script>
+	<script src="js/timer.js"></script>
+
+	<script src="js/myscript.js"></script>
+	<link rel="stylesheet" href="css/mystyles.css" />
+	
+
+
+	
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="video.js"></script>
+
+		<script type="text/javascript">
+			function init(){
+			document.addEventListener("deviceready", console.log('ready'), true);
+			}
+		 
+			function playVideo(vidUrl) {
+			window.plugins.videoPlayer.play(vidUrl);
+			}
+		</script> 
+		
+<script>
+
+//
+//	sample animtions[] 
+//
+// a testing one
+var intvTest = [
+	{ id:"Test", header:"Test" },
+	{ time:2, clock:5, msg:"Testing ........", img:"bike1.jpg" },
+	{ time:1, msg:".--.--.", log:"three" },
+	{ time:1, msg:".--.", log:"two" },
+	{ time:1, msg:".", log:"one" },
+	{ close:true }
+] ;
+
+// simple single step exercise
+var intvSimple = [
+	{ header:"Beginner" },
+	{ time:5, clock:10,msg:"Get Ready", mp3:"ready" },
+	{ time:5, msg:"Jumping Jacks", mp3:"jacks", img:"jumpingjacks.jpg" },
+	{ mp3:"0003_voice_female_go_02",msg: "GO", img:"jumpingjacks.jpg" },
+	{ time:40, clock:50, msg: "", msgColor:"Green", clockColor:"black",
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:10, msg:"10 More", msgColor:"black", mp3:"10more"},
+	{ time:5, clock:5, msg:"All Done", msgColor:"red", clockColor:"black", 
+		mp3:"0047_boxing_bell_ring", img:"bike1.jpg",
+		btnClose:true, btnReset:false, btnStop: false, btnStart: false
+	},
+	
+	{ time:5, clock:10,msg:"Get Ready", mp3:"ready" },
+	{ time:5, msg:"ski", mp3:"ski", img:"ski.jpg" },
+	{ mp3:"0003_voice_female_go_02",msg: "GO", img:"ski.jpg" },
+	{ time:40, clock:50, msg: "", msgColor:"Green", clockColor:"black",
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:10, msg:"10 More", mp3:"10more"},
+	{ time:5, clock:5, msg:"All Done", msgColor:"red", clockColor:"black", 
+		mp3:"0047_boxing_bell_ring", img:"bike1.jpg",
+		btnClose:true, btnReset:false, btnStop: false, btnStart: false
+	},
+	{ time:5, clock:10,msg:"Get Ready", mp3:"ready" },
+	{ time:5, msg:"powersquats", mp3:"powersquats", img:"powersquats.jpg" },
+	{ mp3:"0003_voice_female_go_02",msg: "GO", img:"powersquats.jpg" },
+	{ time:40, clock:50, msg: "", msgColor:"Green", clockColor:"black",
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:10, msg:"10 More", mp3:"10more"},
+	{ time:5, clock:5, msg:"Good Job", msgColor:"red", clockColor:"black", 
+		mp3:"0047_boxing_bell_ring", img:"bike1.jpg",
+		btnClose:true, btnReset:false, btnStop: false, btnStart: false
+	},	
+	{ close:1}
+] ;
+
+// a two step exercise with ready time
+var intvTwoStep = [
+	{ header:"Two Steps", css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" } },
+	// ready
+	{ time:1, clock:5, msg:"Step 1: Get Ready", mp3:"hooray", },
+	{ time:4, mp3loop:"009dreamscape"},	
+	// workout
+	{ time:7, clock:10,  msg: "Workout 1", msgColor:"red", mp3:"bellshort", clockColor:"blue",
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(rgb(243, 226, 100),rgb(243, 52, 35))" },
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"3 Seconds", mp3:"knock"},
+	{ time:1, msg:"Almost ...", mp3:"knock"},
+	{ time:1, msg:"There ...", mp3:"knock"},
+	// break
+	{ time:5, clock:5, msg:"Take a break!", msgColor:"green", clockColor:"black", mp3:"hooray", 
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" },
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false },
+	// ready
+	{ time:5, clock:5, msg:"Step 2: Get Ready" },
+	// workout 2
+	{ time:7, clock:10,  msg: "Workout 2", msgColor:"black", mp3:"bellshort", clockColor:"blue",
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(rgb(243, 226, 100),rgb(243, 52, 35))" },
+			btnClose:false, btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"3 Seconds", mp3:"knock"},
+	{ time:1, msg:"Almost ...", mp3:"knock"},
+	{ time:1, msg:"There ...", mp3:"knock"},
+	// done
+	{ time:5, clock:5, msg:"All Done", msgColor:"green", clockColor:"black", mp3:"hooray", 
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" },
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false },
+	{ close:1}
+] ;
+
+
+// simple with video
+var intvVideo = [
+	{ mp3:"miamivice", header:"Video" },
+	{ time:5, clock:5, msg:"Get Ready for Push ups", mp3:"hooray", 
+		btnCancel: true },
+	{ css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" }},
+	{ time:5, clock:10,  msg: "Push Up Workout", msgColor:"red", clockColor:"blue",
+		vid:"workout",
+		btnCancel:false, btnStart:true, btnStop:true, btnReset: true, btnClose: true },
+	{ time:2, msg:"5 Seconds ...", mp3:"bell"},
+	{ time:1, msg:"hurry ...", mp3:"knock"},
+	{ time:1, msg:"faster ...", mp3:"knock"},
+	{ time:1, msg:"FASTER!!! ...", mp3:"knock"},
+	{ time:5, clock:5, msg:"done", msgColor:"black", clockColor:"black", mp3:"hooray", vid:""},
+	{ close:true }
+] ;
+// simple video, no mp3
+var intvVideoOnly = [
+	{ header:"Video" },
+	{ time:5, clock:5, msg:"Get Ready for Push ups", 
+		btnCancel: true },
+	{ css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" }},
+	{ time:5, clock:10,  msg: "Push Up Workout", msgColor:"red", clockColor:"blue", //vid:"workout",
+		btnCancel:false, btnStart:true, btnStop:true, btnReset: true, btnClose: true },
+	{ time:2, msg:"5 Seconds ..."},
+	{ time:1, msg:"hurry ..."},
+	{ time:1, msg:"faster ..."},
+	{ time:1, msg:"FASTER!!! ..."},
+	{ time:5, clock:5, msg:"done", msgColor:"black", clockColor:"black", vid:""},
+	{ close:true }
+] ;
+
+//clock 10 sec
+var intv10sec = [
+	{ time:10, clock:10, msg:"10 Seconds",
+			btnClose:true, btnReset:true, btnStop: true, btnStart: true },
+	{ close:true }
+
+] ;
+
+//clock 10 sec
+var intvMsg10 = [
+	{ time:1, clock:10, msg:"10 Seconds",
+		btnClose:true, btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"9 Seconds."},
+	{ time:1, msg:"8 Seconds"},
+	{ time:1, msg:"7 Seconds."},
+	{ time:1, msg:"6 Seconds"},
+	{ time:1, msg:"5 Seconds."},
+	{ time:1, msg:"4 Seconds"},
+	{ time:1, msg:"3 Seconds."},
+	{ time:1, msg:"2 Seconds"},
+	{ time:1, msg:"1 Seconds."},
+	{ btnClose:true, btnReset:false, btnStop: false, btnStart: false},
+	{ close:true }
+
+] ;
+
+</script>
+<script type="text/javascript">
+// log dump
+function timerLogDump(){
+	console.log("Id:"+intv.timerId+", Start:"+intv.timerStart+", Stop:"+intv.timerStop) ;
+	console.log("Log:"+intv.timerLog) ;
+
+}
+$("#intvPopup").on("log", timerLogDump );
+
+///////////////
+	
+console.log("LOADED ------------------");
+</script>	
+
+
+		
+	</head>
+
+	<body>
+<!-- Page: Cardio Intervals  header-->
+
+		<div id="page1" data-role="page" data-title="Cardio Intervals"  >
+					<div data-role="header"
+						data-position="fixed"
+							data-id="vs_header"
+							data-theme="d">
+								<h1>HIIT 50 Secs.</h1>
+					<a href="index.html" rel="external" data-icon="cali"	data-theme="a" data-iconpos="left" >Home</a>
+						
+					</div><!-- Cardio Intervals-->
+					
+					<ul data-role="listview" data-divider-theme="a" >
+					<div data-role="collapsible" data-inset="false" data-theme="a">
+						<h3>Instructions</h3>
+					</div>	
+					</ul>
+			<div data-role="content" class="muevete">
+				
+				<ul data-role="listview" data-divider-theme="a" data-inset="false" Info - data-icon="video">
+						
+						<li data-theme="a">
+						   <a  href="#adv" 		
+							data-transition="slideup">
+							<img src="img/album_hiit50_1.jpg"/>
+							<h2>Workout Plan #1 </h2>
+							<p>Trainer: Mallory</p>
+							<p></p>
+							</a>
+							
+						</li>
+				</ul>
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Jumping Jacks</h1>
+										
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#jumpingjacks" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										 </a>
+									
+									</div>
+								</div>
+								
+						
+							       
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+						<div>
+										<div>
+										<label for="jumping_jacks_R1">R1:</label>
+											
+								<input type="number" name="jumping_jacks_R1" id="jumping_jacks_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R2">R2:</label>
+											
+								<input type="number" name="jumping_jacks_R2" id="jumping_jacks_R2" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R3">R3:</label>
+											
+								<input type="number" name="jumping_jacks_R3" id="jumping_jacks_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+											
+										</div>
+						</div>
+
+					
+			
+						<img src="img\tabata\jumpingjacks.jpg" alt="jumping_jacks" class="exercise" />
+					</div> <!---field contain -->
+
+				
+   
+    
+     <a data-role="button" href="#intvPopup" onclick="intv.events = intvTest ;"
+			data-rel="popup">Test PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="flow" onclick="intv.events = intvSimple ;" data-rel="popup">Simple PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="flow" onclick="intv.events = intvTwoStep ;" data-rel="popup">Two Step PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="flip" onclick="intv.events = intvVideo ;" data-rel="popup">Video PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="fade" onclick="intv.events = intvVideoOnly ;" data-rel="popup">Video Only PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="flow" onclick="intv.events = intv10sec ;" data-rel="popup">10 Seconds</a>
+       <a data-role="button" href="#intvPopup" data-transition="flip" onclick="intv.events = intvMsg10 ;" data-rel="popup">10 Messages</a>
+        <a data-role="button" href="#dialog" data-rel="dialog">Popup as Dialog</a>
+
+   
+
+<!-- 
+
+Popup 
+All intv elements are required
+
+ -->
+<div id="intvPopup" data-role="popup" data-position-to="window" data-overlay-theme="e" data-theme="d" >
+	<div data-role="header">
+		<h2 id="intvHeader" > Let's Do It </h2>
+	</div>
+	<div id="intvContent" data-role="content" >
+		<h1 id="intvMsg">Get Ready ...<br></h1>
+		<h1 id="intvClock"><br></h1>
+	</div>
+	<div data-role="footer">
+		<a data-role="button" id="intvCancel" style="display:none;">Cancel</a>
+		<a data-role="button" id="intvStop" style="display:none;">Stop</a>
+		<a data-role="button" id="intvStart" style="display:none;" >Start</a>
+		<a data-role="button" id="intvReset" style="display:none;">Reset</a>
+		<a data-role="button" id="intvClose" style="display:none;">Close</a>
+		<a data-role="button" id="jumpingjacks" style="display:none;">Close</a>
+	</div>
+</div>
+
+
+							
+				</div>
+			</div>
+			</div>
+		</div><!--page-->	
+		
+										
+		
+		<!--Dialog Jumping Jacks-->
+								<div data-role="page"
+									id="jumpingjacks"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jumping Jacks</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\jumpingjacks.jpg" alt="ski" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jumpingjacks.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+		
+		
+							
+				
+				<div data-role="page" id="adv5" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+				
+				<div data-role="page" id="adv6" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+						<!--Video Page ends here-->		
+			
+		
+										
+
+
+											
+
+								
+								
+	</body>
+</html>									

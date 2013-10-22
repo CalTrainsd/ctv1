@@ -1,0 +1,5070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Californitraining</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 " />
+
+	<link rel="stylesheet" href="css/jquery.mobile.css" />
+	<link rel="stylesheet" href="themes/californitraining.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile.js"></script>
+
+	<script src="js/myscript.js"></script>
+	<link rel="stylesheet" href="css/mystyles.css" />
+	
+
+
+	
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="video.js"></script>
+
+<script type="text/javascript">
+function init(){
+document.addEventListener("deviceready", console.log('ready'), true);
+}
+ 
+function playVideo(vidUrl) {
+window.plugins.videoPlayer.play(vidUrl);
+}
+</script> 
+
+<script>
+
+
+var funTime = {
+// music
+readymp3:   "mp3/0047_boxing_bell_ring.mp3",
+workoutmp3: "mp3/0003_voice_female_go_02.mp3", 
+finishmp3:  "mp3/0047_boxing_bell_ring.mp3",
+
+// timers
+prepTime:   5,
+prepMsg:    "Get Ready ...",
+workTime:   50, 
+workMsg:    "Go ...",
+doneMsg:    "Good Job!!!",
+
+
+// Objects and event functions
+popup:      "#popup2",
+counter:    "#counter",
+counterMsg:    "#counterMsg",
+timer:      1,
+pausing:    false,
+
+ 
+// media prop, methods
+media:      null,
+
+select:
+  function( src ) {
+    if (device.platform == 'Android') {
+      src = '/android_asset/www/' + src;
+    }
+    this.eject() ;
+    this.media = new Media( src );
+    this.media.play() ;
+    this.pausing = false ;
+  },
+
+play:
+  function() {
+    if( this.media ) {
+      this.media.play(); 
+    }
+  },
+
+pause: 
+  function() {
+    if( this.media )
+      this.media.pause();
+  },
+ 
+stop: 
+  function() {
+    if( this.media )
+      this.media.stop();
+  },
+ 
+eject: 
+  function() {
+    if( this.media) {
+      this.media.stop();
+      this.media.release() ;
+      this.media = null ;
+    }
+
+  },
+ 
+
+
+decCounter:
+  function() {
+    var cnt = 0 ;
+    cnt = $(funTime.counter).html() ;
+    $(counter).html( --cnt ) ;
+    if( cnt <= 0 )
+      clearInterval( funTime.timer ) ;
+
+    return cnt ;
+  },
+
+
+afterOpen:
+  function( event, ui ) {
+console.log("afteropen");
+    // prepTime setup
+    $("#btnCancel").click( funTime.btnCancel ) ;
+    $("#btnPause").click( funTime.btnPause ) ;
+    $("#btnStart").click( funTime.btnStart ) ;
+    $("#btnReset").click( funTime.btnReset ) ;
+    $("#btnClose").click( funTime.btnClose ) ;
+
+    $(funTime.counter).html( funTime.prepTime ) ;
+    $(funTime.counterMsg).html( funTime.prepMsg ) ;
+    $("#btnCancel").show() ;
+    $("#btnPause").hide() ;
+    $("#btnStart").hide() ;
+    $("#btnReset").hide() ;
+    $("#btnClose").hide() ;
+    funTime.select( funTime.readymp3 );
+    funTime.timer = setInterval( function() {
+       if( funTime.pausing ) return ;
+       if( funTime.decCounter() == 0 ) {
+        /// workTime setup
+        $("#btnCancel").show() ;
+        $("#btnPause").show() ;
+        $("#btnReset").show() ;
+        $("#btnStart").show() ;
+        $(funTime.counter).html( funTime.workTime ) ;
+        $(funTime.counterMsg).html( funTime.workMsg ) ;
+        funTime.select( funTime.workoutmp3 );
+        funTime.timer = setInterval( function() {
+          if( funTime.pausing ) return ;
+          if( funTime.decCounter() == 0 ) {
+            // wait for close
+            $(funTime.counter).html( "" ) ;
+            $(funTime.counterMsg).html( funTime.doneMsg ) ;
+            $("#btnPause").hide() ;
+            $("#btnStart").hide() ;
+            $("#btnReset").hide() ;
+            $("#btnClose").show() ;
+            funTime.select( funTime.finishmp3 );
+          }
+        }, 1000 ) ;
+
+      }
+    }, 1000) ;
+  },
+afterClose:
+  function() {
+console.log("afterclose") ;
+      clearInterval( funTime.timer ) ;
+      funTime.eject() ;
+    },
+
+btnCancel:
+    function() {
+      clearInterval( funTime.timer ) ;
+      $( funTime.popup ).popup( "close" );
+    }, 
+
+btnPause:
+    function() {
+      funTime.pausing = true ;
+      funTime.pause() ;
+
+    }, 
+
+btnStart:
+    function() {
+      funTime.pausing = false ;
+      funTime.play() ;
+
+    }, 
+
+btnReset:
+    function() {
+      $( funTime.counter).html( funTime.workTime ) ;
+    }, 
+
+btnClose:
+    function() {
+      $( funTime.popup ).popup( "close" );
+    } 
+
+
+} ;
+
+
+
+
+$( document ).on( "pageinit", "#page1",  function( event ) {
+console.log( "page1:pageinit") ; 
+    $( "#popup2").on("popupafteropen", funTime.afterOpen );
+    $( "#popup2").on("popupafterclose", funTime.afterClose );
+
+});
+
+</script>
+
+
+	
+</head>
+
+<body >
+<!-- Page: Losing Weight header-->
+
+<div id="page1" data-role="page" data-title="Toning and Losing 5lbs"  >
+				<div data-role="header"
+					data-position="fixed"
+						data-id="vs_header"
+						data-theme="c">
+							<h1>Losing Weight</h1>
+				<a href="index.html" rel="external" data-icon="cali"	data-iconpos="left" >Home</a>
+					
+						
+				</div><!-- Losing Weight -->
+					<ul data-role="listview" data-divider-theme="a" >
+					<div data-role="collapsible" data-inset="false" data-theme="a">
+						<h3>Instructions</h3>
+					</div>	
+					</ul>
+				
+	<div data-role="content" class="muevete">
+			<ul data-role="listview" data-divider-theme="e" data-inset="false" data-icon="arrow-r">
+                    
+                    <li data-theme="d">
+					   <a  href="#adv" 		
+						data-transition="slide">
+						<img src="img/album-bb4.jpg"/>
+						<h2>Workout Plan #1</h2>
+						<p>Trainer: Ana</p>
+						<p>Duration: 4 weeks</p>
+						</a>
+						
+					</li>
+						
+			</ul>
+	<div class="rutinas">
+		
+			<div data-role="collapsible" data-inset="false" >
+							<h3>Routine A </h3>
+									
+						<div class="circuit"><h4>Circuit #1</h4>
+							<div class="position1">
+						
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Chest Press</h1>
+																				
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#chest" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="right"
+											class="ui-btn-right">video
+											 </a>
+											
+								</div>
+							</div>		
+										
+								
+										
+
+											 <!-- button end-->
+						
+					<form>	
+							<div data-role="fieldcontain" >
+							
+
+									<div>
+										<div>
+											<label for="dumbbell_chest_press_W1">W1:</label>
+											<input type="number" name="dumbbell_chest_press_W1" id="dumbbell_chest_press_W1" value="0" maxlength="3" data-theme="c"/>
+								
+
+											<label for="dumbbell_chest_press_R1">R1:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R1" id="dumbbell_chest_press_R1" value="15" maxlength="3"  data-theme="a"/>
+										</div>
+								</div>
+								<div>
+									<div >
+										<label for="dumbbell_chest_press_W2">W2:</label>
+										<input type="number" name="dumbbell_chest_press_W2" id="dumbbell_chest_press_W2" value="0" maxlength="3" data-theme="c" />
+								
+
+													<label for="dumbbell_chest_press_R2">R2:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R2" id="dumbbell_chest_press_R2" value="15" maxlength="3"  data-theme="a"/>
+								
+													
+
+									</div>
+								</div>
+								<div>
+									<div >
+										<label for="dumbbell_chest_press_W3">W3:</label>
+										<input type="number" name="dumbbell_chest_press_W3" id="dumbbell_chest_press_W3" value="0" maxlength="3" data-theme="c" />
+								
+
+													<label for="dumbbell_chest_press_R3">R3:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R3" id="dumbbell_chest_press_R3" value="15" maxlength="3"  data-theme="a"/>
+								
+													
+
+									</div>
+								</div>
+								
+						
+									<img src="img\chest\dumbbellchestpress.jpg" alt="dumbbell_chest_press" class="exercise" />
+
+							</div> 
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Bicep Curl Knee Up</h1>
+										<a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" 
+					data-icon="edit" data-theme="c" data-iconpos="left">Help</a>
+					
+					<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					  <p>Do  <strong>8 repetitions</strong> in each leg</p>
+					</div>
+							
+						
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#dumbbellkneeup" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+								</div>				
+							</div>
+											 <!--button end-->
+						
+						
+						<div data-role="fieldcontain" >
+						
+
+							<div>
+									<div>
+										<label for="dumbbell_bicep_curl_with_knee_up_W1">W1:</label>
+										<input type="number" name="dumbbell_bicep_curl_with_knee_up_W1" id="dumbbell_bicep_curl_with_knee_up_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="dumbbell_bicep_curl_with_knee_up_R1">R1:</label>
+													
+										<input type="number" name="dumbbell_bicep_curl_with_knee_up_R1" id="dumbbell_bicep_curl_with_knee_up_R1" value="16" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="dumbbell_bicep_curl_with_knee_up_W2">W2:</label>
+									<input type="number" name="dumbbell_bicep_curl_with_knee_up_W2" id="dumbbell_bicep_curl_with_knee_up_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="dumbbell_bicep_curl_with_knee_up_R2">R2:</label>
+													
+										<input type="number" name="dumbbell_bicep_curl_with_knee_up_R2" id="dumbbell_bicep_curl_with_knee_up_R2" value="16" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="dumbbell_bicep_curl_with_knee_up_W3">W3:</label>
+									<input type="number" name="dumbbell_bicep_curl_with_knee_up_W3" id="dumbbell_bicep_curl_with_knee_up_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="dumbbell_bicep_curl_with_knee_up_R3">R3:</label>
+													
+										<input type="number" name="dumbbell_bicep_curl_with_knee_up_R3" id="dumbbell_bicep_curl_with_knee_up_R3" value="16" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\bicep\bicepcurlkneeup.jpg" alt="dumbbell_bicep_curl_with_knee_up" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Tricep Cable Push Down</h1>
+										
+						
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#pushdown" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+							</div>					
+						</div>
+											 <!--button end-->
+						
+						
+						<div data-role="fieldcontain" >
+						
+
+							<div>
+									<div>
+										
+										<label for="tricep_cable_push_down_W1">W1:</label>
+									<input type="number" name="tricep_cable_push_down_W1" id="tricep_cable_push_down_W1" value="0" maxlength="3" data-theme="c"/>
+
+										<label for="tricep_cable_push_down_R1">R1:</label>
+													
+										<input type="number" name="tricep_cable_push_down_R1" id="tricep_cable_push_down_R1" value="15" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									
+										<label for="tricep_cable_push_down_W2">W2:</label>
+									<input type="number" name="tricep_cable_push_down_W2" id="tricep_cable_push_down_W2" value="0" maxlength="3" data-theme="c"/>
+
+												<label for="tricep_cable_push_down_R2">R2:</label>
+													
+										<input type="number" name="tricep_cable_push_down_R2" id="tricep_cable_push_down_R2" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+										<label for="tricep_cable_push_down_W3">W3:</label>
+									<input type="number" name="tricep_cable_push_down_W3" id="tricep_cable_push_down_W3" value="0" maxlength="3" data-theme="c"/>
+							
+
+												<label for="tricep_cable_push_down_R3">R3:</label>
+													
+										<input type="number" name="tricep_cable_push_down_R3" id="tricep_cable_push_down_R3" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\tricep\triceppushdown.jpg" alt="tricep_cable_push_down" class="exercise" />
+
+						</div>  
+						</div><!--Circuit #1 ends here-->	
+
+							<div class="circuit"><h4>Circuit #2</h4>	
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Dumbbell Tricep Extension</h1>
+										
+									
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#dtricepextension" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									</div>		
+								</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="dumbbell_tricep_extension_W1">W1:</label>
+									<input type="number" name="dumbbell_tricep_extension_W1" id="dumbbell_tricep_extension_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="dumbbell_tricep_extension_R1">R1:</label>
+												
+									<input type="number" name="dumbbell_tricep_extension_R1" id="dumbbell_tricep_extension_R1" value="15" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_tricep_extension_W2">W2:</label>
+								<input type="number" name="dumbbell_tricep_extension_W2" id="dumbbell_tricep_extension_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_tricep_extension_R2">R2:</label>
+												
+									<input type="number" name="dumbbell_tricep_extension_R2" id="dumbbell_tricep_extension_R2" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_tricep_extension_W3">W3:</label>
+								<input type="number" name="dumbbell_tricep_extension_W3" id="dumbbell_tricep_extension_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_tricep_extension_R3">R3:</label>
+												
+									<input type="number" name="dumbbell_tricep_extension_R3" id="dumbbell_tricep_extension_R3" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\tricep\tricepoverheaddumbbell.jpg" alt="dumbbell_tricep_extension" class="exercise" />
+						
+					</div> 
+					
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Front Lat Pull Down</h1>
+										
+										
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frontlat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>					
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="front_lat_pull_down_W1">W1:</label>
+								<input type="number" name="front_lat_pull_down_W1" id="front_lat_pull_down_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="front_lat_pull_down_R1">R1:</label>
+											
+								<input type="number" name="front_lat_pull_down_R1" id="front_lat_pull_down_R1" value="15" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="front_lat_pull_down_W2">W2:</label>
+							<input type="number" name="front_lat_pull_down_W2" id="front_lat_pull_down_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="front_lat_pull_down_R2">R2:</label>
+											
+								<input type="number" name="front_lat_pull_down_R2" id="front_lat_pull_down_R2" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="front_lat_pull_down_W3">W3:</label>
+							<input type="number" name="front_lat_pull_down_W3" id="front_lat_pull_down_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="front_lat_pull_down_R3">R3:</label>
+											
+								<input type="number" name="front_lat_pull_down_R3" id="front_lat_pull_down_R3" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\back\latpulldown.jpg" alt="front_lat_pull_down" class="exercise" />
+
+				</div>                    
+					
+					
+				</div><!--circuit 2 end here--->
+		
+					
+				</div> <!--collapsible A end-->
+				<div data-role="collapsible" data-inset="false" >
+					<h3>Routine B </h3>
+								<div class="circuit"><h4>Circuit #1</h4>	
+								
+						<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Dumbbell Shoulder Press</h1>	
+										
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dumbbellshoulderpress" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="dumbbell_shoulder_press_W1">W1:</label>
+									<input type="number" name="dumbbell_shoulder_press_W1" id="dumbbell_shoulder_press_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="dumbbell_shoulder_press_R1">R1:</label>
+												
+									<input type="number" name="dumbbell_shoulder_press_R1" id="dumbbell_shoulder_press_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_shoulder_press_W2">W2:</label>
+								<input type="number" name="dumbbell_shoulder_press_W2" id="dumbbell_shoulder_press_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_shoulder_press_R2">R2:</label>
+												
+									<input type="number" name="dumbbell_shoulder_press_R2" id="dumbbell_shoulder_press_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_shoulder_press_W3">W3:</label>
+								<input type="number" name="dumbbell_shoulder_press_W3" id="dumbbell_shoulder_press_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_shoulder_press_R3">R3:</label>
+												
+									<input type="number" name="dumbbell_shoulder_press_R3" id="dumbbell_shoulder_press_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\shoulder\dumbbellshoulderpress.jpg" alt="dumbbell_shoulder_press" class="exercise" />
+
+					</div> 
+					
+					<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Sumo Squat with Lateral Raise</h1>
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sumolateral" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+						</div>			
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="sumo_squat_with_lateral_raise_W1">W1:</label>
+								<input type="number" name="sumo_squat_with_lateral_raise_W1" id="sumo_squat_with_lateral_raise_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="sumo_squat_with_lateral_raise_R1">R1:</label>
+											
+								<input type="number" name="sumo_squat_with_lateral_raise_R1" id="sumo_squat_with_lateral_raise_R1" value="10" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_with_lateral_raise_W2">W2:</label>
+							<input type="number" name="sumo_squat_with_lateral_raise_W2" id="sumo_squat_with_lateral_raise_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_with_lateral_raise_R2">R2:</label>
+											
+								<input type="number" name="sumo_squat_with_lateral_raise_R2" id="sumo_squat_with_lateral_raise_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_with_lateral_raise_W3">W3:</label>
+							<input type="number" name="sumo_squat_with_lateral_raise_W3" id="sumo_squat_with_lateral_raise_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_with_lateral_raise_R3">R3:</label>
+											
+								<input type="number" name="sumo_squat_with_lateral_raise_R3" id="sumo_squat_with_lateral_raise_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\sumosquatlateralraiseo.jpg" alt="sumo_squat_with_lateral_raise" class="exercise" />
+
+				</div>    
+
+					<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Alternating Step Up</h1>
+										
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dstepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>		
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+					
+
+								<label for="alternating_step_up_R1">R1:</label>
+											
+								<input type="number" name="alternating_step_up_R1" id="alternating_step_up_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="alternating_step_up_R2">R2:</label>
+											
+								<input type="number" name="alternating_step_up_R2" id="alternating_step_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="alternating_step_up_R3">R3:</label>
+											
+								<input type="number" name="alternating_step_up_R3" id="alternating_step_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="alternating_step_up" class="exercise" />
+
+				</div>     
+
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>				
+				
+				<!-- Page 1 Popup -->
+							<div id="popup2" class="funTime" data-role="popup" data-theme="e" >
+							  <div data-role="header" ><a data-role="button" id="btnCancel" style="display:none;" Info - data-icon="delete" data-iconpos="notext"></a>
+								<h2> Let's Do It </h2>
+							  </div>
+							  <div data-role="content">
+								<h1 id="counterMsg" style="text-align:center;">Get Ready ...</h1>
+								<h1 id="counter" style="text-align:center;">10</h1>
+							  </div>
+							  <div data-role="footer">
+								<a data-role="button" id="btnCancel" style="display:none;">Cancel</a>
+								<a data-role="button" id="btnPause" style="display:none;">Pause</a>
+								<a data-role="button" id="btnStart" style="display:none;">Start</a>
+								<a data-role="button" id="btnReset" style="display:none;">Reset</a>
+								<a data-role="button" id="btnClose" style="display:none;">Close</a>
+							  </div>
+							</div>
+
+								
+			</div><!--Circuit #1 end here-->	
+					
+					<div class="circuit"><h4>Circuit #2</h4>
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Press</h1>
+									
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legpress" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="leg_press_W1">W1:</label>
+									<input type="number" name="leg_press_W1" id="leg_press_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="leg_press_R1">R1:</label>
+												
+									<input type="number" name="leg_press_R1" id="leg_press_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_press_W2">W2:</label>
+								<input type="number" name="leg_press_W2" id="leg_press_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_press_R2">R2:</label>
+												
+									<input type="number" name="leg_press_R2" id="leg_press_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_press_W3">W3:</label>
+								<input type="number" name="leg_press_W3" id="leg_press_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_press_R3">R3:</label>
+												
+									<input type="number" name="leg_press_R3" id="leg_press_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\quads\legpress.jpg" alt="leg_press" class="exercise" />
+
+					</div> 
+					
+					
+			<div class="position1">			
+				<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Side Step Up</h1>
+										
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sidestep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+						</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+					
+
+								<label for="side_step_up_R1">R1:</label>
+											
+								<input type="number" name="side_step_up_R1" id="side_step_up_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+							
+					
+
+										<label for="side_step_up_R2">R2:</label>
+											
+								<input type="number" name="side_step_up_R2" id="side_step_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+							
+					
+
+										<label for="side_step_up_R3">R3:</label>
+											
+								<input type="number" name="side_step_up_R3" id="side_step_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\sidestepups.jpg" alt="side_step_up" class="exercise" />
+
+				</div>  
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				
+				                  
+
+				
+			</div><!--Circuit #2 end here-->		
+			
+						<div class="circuit"><h4>Circuit #3</h4>
+							<div class="position1">						
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+											<h1>Prone Leg Curl</h1>
+										
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#legcurl" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="prone_leg_curl_W1">W1:</label>
+									<input type="number" name="prone_leg_curl_W1" id="prone_leg_curl_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="prone_leg_curl_R1">R1:</label>
+												
+									<input type="number" name="prone_leg_curl_R1" id="prone_leg_curl_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="prone_leg_curl_W2">W2:</label>
+								<input type="number" name="prone_leg_curl_W2" id="prone_leg_curl_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="prone_leg_curl_R2">R2:</label>
+												
+									<input type="number" name="prone_leg_curl_R2" id="prone_leg_curl_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="prone_leg_curl_W3">W3:</label>
+								<input type="number" name="prone_leg_curl_W3" id="prone_leg_curl_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="prone_leg_curl_R3">R3:</label>
+												
+									<input type="number" name="prone_leg_curl_R3" id="prone_leg_curl_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\hamstrings\pronelegcurl.jpg" alt="prone_leg_curl" class="exercise" />
+
+					</div> 
+					
+				<div class="position1">	
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Sumo Squat with Upright Row</h1>
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sumoupright" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+					</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="sumo_squat_with_upright_row_W1">W1:</label>
+								<input type="number" name="sumo_squat_with_upright_row_W1" id="sumo_squat_with_upright_row_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="sumo_squat_with_upright_row_R1">R1:</label>
+											
+								<input type="number" name="sumo_squat_with_upright_row_R1" id="sumo_squat_with_upright_row_R1" value="10" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_with_upright_row_W2">W2:</label>
+							<input type="number" name="sumo_squat_with_upright_row_W2" id="sumo_squat_with_upright_row_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_with_upright_row_R2">R2:</label>
+											
+								<input type="number" name="sumo_squat_with_upright_row_R2" id="sumo_squat_with_upright_row_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_with_upright_row_W3">W3:</label>
+							<input type="number" name="sumo_squat_with_upright_row_W3" id="sumo_squat_with_upright_row_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_with_upright_row_R3">R3:</label>
+											
+								<input type="number" name="sumo_squat_with_upright_row_R3" id="sumo_squat_with_upright_row_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\squatuprightrow.jpg" alt="sumo_squat_with_upright_row" class="exercise" />
+
+				</div>                    
+				
+				                  
+
+				
+			</div><!--Circuit #3 end here-->		
+			
+
+				</div><!--collapsible B ends here-->				
+				
+			</div><!--rutinas end-->
+			<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-losing2.jpg"/>
+									<h2>Workout Plan #2</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+								<div data-role="collapsible" data-inset="false" >
+											<h3>Routine A</h3>
+													<div class="circuit"><h4>Circuit #1</h4>		
+						
+						<div class="position1">
+										<div data-role="header" data-fullscreen="true" data-theme="b">
+							<h1>Standing Fly</h1>
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#standingfly" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								
+									</a>
+								</div>	
+							</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="standing_fly_W1">W1:</label>
+									<input type="number" name="standing_fly_W1" id="standing_fly_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="standing_fly_R1">R1:</label>
+												
+									<input type="number" name="standing_fly_R1" id="standing_fly_R1" value="15" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="standing_fly_W2">W2:</label>
+								<input type="number" name="standing_fly_W2" id="standing_fly_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="standing_fly_R2">R2:</label>
+												
+									<input type="number" name="standing_fly_R2" id="standing_fly_R2" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="standing_fly_W3">W3:</label>
+								<input type="number" name="standing_fly_W3" id="standing_fly_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="standing_fly_R3">R3:</label>
+												
+									<input type="number" name="standing_fly_R3" id="standing_fly_R3" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\chest\cablefly.jpg" alt="standing_fly" class="exercise" />
+
+					</div> 
+					
+					
+					<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Cable Bicep Curls</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#cablecurl" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="cable_biceps_curl_W1">W1:</label>
+									<input type="number" name="cable_biceps_curl_W1" id="cable_biceps_curl_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="cable_biceps_curl_R1">R1:</label>
+												
+									<input type="number" name="cable_biceps_curl_R1" id="cable_biceps_curl_R1" value="15" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="cable_biceps_curl_W2">W2:</label>
+								<input type="number" name="cable_biceps_curl_W2" id="cable_biceps_curl_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="cable_biceps_curl_R2">R2:</label>
+												
+									<input type="number" name="cable_biceps_curl_R2" id="cable_biceps_curl_R2" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="cable_biceps_curl_W3">W3:</label>
+								<input type="number" name="cable_biceps_curl_W3" id="cable_biceps_curl_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="cable_biceps_curl_R3">R3:</label>
+												
+									<input type="number" name="cable_biceps_curl_R3" id="cable_biceps_curl_R3" value="15" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\bicep\bicepcurlwithband.jpg" alt="cable_biceps_curl" class="exercise" />
+
+						</div>
+			
+					
+					</div> <!--circuit #1 ends here-->
+					
+					<div class="circuit"><h4>Circuit #2</h4>		
+					
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Boxing with Dumbbells</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#boxing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="boxing_with_dumbbells_W1">W1:</label>
+										<input type="number" name="boxing_with_dumbbells_W1" id="boxing_with_dumbbells_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="boxing_with_dumbbells_R1">R1:</label>
+													
+										<input type="number" name="boxing_with_dumbbells_R1" id="boxing_with_dumbbells_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="boxing_with_dumbbells_W2">W2:</label>
+									<input type="number" name="boxing_with_dumbbells_W2" id="boxing_with_dumbbells_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="boxing_with_dumbbells_R2">R2:</label>
+													
+										<input type="number" name="boxing_with_dumbbells_R2" id="boxing_with_dumbbells_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="boxing_with_dumbbells_W3">W3:</label>
+									<input type="number" name="boxing_with_dumbbells_W3" id="boxing_with_dumbbells_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="boxing_with_dumbbells_R3">R3:</label>
+													
+										<input type="number" name="boxing_with_dumbbells_R3" id="boxing_with_dumbbells_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+							
+					
+								<img src="img\shoulder\boxing.jpg" alt="boxing_with_dumbbells" class="exercise" />
+
+						</div> 
+					
+						<div class="position1">				
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Tricep Cable Push Down</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#pushdown" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+					</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="tricep_cable_push_down_W1">W1:</label>
+								<input type="number" name="tricep_cable_push_down_W1" id="tricep_cable_push_down_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="tricep_cable_push_down_R1">R1:</label>
+											
+								<input type="number" name="tricep_cable_push_down_R1" id="tricep_cable_push_down_R1" value="15" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="tricep_cable_push_down_W2">W2:</label>
+							<input type="number" name="tricep_cable_push_down_W2" id="tricep_cable_push_down_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="tricep_cable_push_down_R2">R2:</label>
+											
+								<input type="number" name="tricep_cable_push_down_R2" id="tricep_cable_push_down_R2" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="tricep_cable_push_down_W3">W3:</label>
+							<input type="number" name="tricep_cable_push_down_W3" id="tricep_cable_push_down_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="tricep_cable_push_down_R3">R3:</label>
+											
+								<input type="number" name="tricep_cable_push_down_R3" id="tricep_cable_push_down_R3" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tricep\triceppushdown.jpg" alt="tricep_cable_push_down" class="exercise" />
+
+				</div> 	
+					
+					
+				</div> <!--circuit #2 ends here-->
+				
+					<div class="circuit"><h4>Circuit #3</h4>		
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Stiff-Legged Dumbbell Dead-lift</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sdeathlift" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="stiff_Legged_dumbbell_deadlift _W1">W1:</label>
+										<input type="number" name="stiff_Legged_dumbbell_deadlift _W1" id="stiff_Legged_dumbbell_deadlift _W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="stiff_Legged_dumbbell_deadlift _R1">R1:</label>
+													
+										<input type="number" name="stiff_Legged_dumbbell_deadlift _R1" id="stiff_Legged_dumbbell_deadlift _R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="stiff_Legged_dumbbell_deadlift _W2">W2:</label>
+									<input type="number" name="stiff_Legged_dumbbell_deadlift _W2" id="stiff_Legged_dumbbell_deadlift _W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="stiff_Legged_dumbbell_deadlift _R2">R2:</label>
+													
+										<input type="number" name="stiff_Legged_dumbbell_deadlift _R2" id="stiff_Legged_dumbbell_deadlift _R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="stiff_Legged_dumbbell_deadlift _W3">W3:</label>
+									<input type="number" name="stiff_Legged_dumbbell_deadlift _W3" id="stiff_Legged_dumbbell_deadlift _W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="stiff_Legged_dumbbell_deadlift _R3">R3:</label>
+													
+										<input type="number" name="stiff_Legged_dumbbell_deadlift _R3" id="stiff_Legged_dumbbell_deadlift _R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\hamstrings\.jpg" alt="stiff_Legged_dumbbell_deadlift " class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+						
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Chest Press</h1>
+																				
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#chest" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+											
+								</div>
+							</div>		
+										
+								
+										
+
+											 <!-- button end-->
+						
+					<form>	
+							<div data-role="fieldcontain" >
+							
+
+									<div>
+										<div>
+											<label for="dumbbell_chest_press_W1">W1:</label>
+											<input type="number" name="dumbbell_chest_press_W1" id="dumbbell_chest_press_W1" value="0" maxlength="3" data-theme="c"/>
+								
+
+											<label for="dumbbell_chest_press_R1">R1:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R1" id="dumbbell_chest_press_R1" value="15" maxlength="3"  data-theme="a"/>
+										</div>
+								</div>
+								<div>
+									<div >
+										<label for="dumbbell_chest_press_W2">W2:</label>
+										<input type="number" name="dumbbell_chest_press_W2" id="dumbbell_chest_press_W2" value="0" maxlength="3" data-theme="c" />
+								
+
+													<label for="dumbbell_chest_press_R2">R2:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R2" id="dumbbell_chest_press_R2" value="15" maxlength="3"  data-theme="a"/>
+								
+													
+
+									</div>
+								</div>
+								<div>
+									<div >
+										<label for="dumbbell_chest_press_W3">W3:</label>
+										<input type="number" name="dumbbell_chest_press_W3" id="dumbbell_chest_press_W3" value="0" maxlength="3" data-theme="c" />
+								
+
+													<label for="dumbbell_chest_press_R3">R3:</label>
+														
+											<input type="number" name="dumbbell_chest_press_R3" id="dumbbell_chest_press_R3" value="15" maxlength="3"  data-theme="a"/>
+								
+													
+
+									</div>
+								</div>
+								
+						
+									<img src="img\chest\dumbbellchestpress.jpg" alt="dumbbell_chest_press" class="exercise" />
+
+							</div> 
+					
+					
+					
+					</div> <!--circuit #3 ends here-->		
+											
+										
+								 
+								</div><!--collabsible beginners ends here-->
+								
+								<div data-role="collapsible" data-inset="false" >
+											<h3>Routine B </h3>
+											
+											<div class="circuit"><h4>Circuit #1</h4>		
+				<div class="position1">				
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Lunge Back Shoulder Press</h1>
+										<a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" 
+					data-icon="edit" data-theme="c" data-iconpos="notext">Instructions</a>
+					
+					<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					  <p>Do  <strong>8 repetitions</strong> in each leg</p>
+					</div>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lungebackshoulder" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+					</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="lunge_back_shoulder_press_W1">W1:</label>
+								<input type="number" name="lunge_back_shoulder_press_W1" id="lunge_back_shoulder_press_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="lunge_back_shoulder_press_R1">R1:</label>
+											
+								<input type="number" name="lunge_back_shoulder_press_R1" id="lunge_back_shoulder_press_R1" value="16" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="lunge_back_shoulder_press_W2">W2:</label>
+							<input type="number" name="lunge_back_shoulder_press_W2" id="lunge_back_shoulder_press_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="lunge_back_shoulder_press_R2">R2:</label>
+											
+								<input type="number" name="lunge_back_shoulder_press_R2" id="lunge_back_shoulder_press_R2" value="16" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="lunge_back_shoulder_press_W3">W3:</label>
+							<input type="number" name="lunge_back_shoulder_press_W3" id="lunge_back_shoulder_press_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="lunge_back_shoulder_press_R3">R3:</label>
+											
+								<input type="number" name="lunge_back_shoulder_press_R3" id="lunge_back_shoulder_press_R3" value="16" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\lungeshoulderpress.jpg" alt="lunge_back_shoulder_press" class="exercise" />
+
+				</div> 
+				
+				<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a"> 
+							<h1>Frontal Raise knee Up</h1>
+							<a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" 
+					data-icon="edit" data-theme="c" data-iconpos="notext">Instructions</a>
+					
+					<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					  <p>Do  <strong>8 repetitions</strong> in each leg then switch leg.</p>
+					</div>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#frontalraisekneeup" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+											 
+							</div>				
+						</div>
+											 <!--button end-->
+						
+						
+						<div data-role="fieldcontain" >
+						
+
+							<div>
+									<div>
+										<label for="frontal_raise_knee_up_W1">W1:</label>
+										<input type="number" name="frontal_raise_knee_up_W1" id="frontal_raise_knee_up_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="frontal_raise_knee_up_R1">R1:</label>
+													
+										<input type="number" name="frontal_raise_knee_up_R1" id="frontal_raise_knee_up_R1" value="16" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="frontal_raise_knee_up_W2">W2:</label>
+									<input type="number" name="frontal_raise_knee_up_W2" id="frontal_raise_knee_up_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="frontal_raise_knee_up_R2">R2:</label>
+													
+										<input type="number" name="frontal_raise_knee_up_R2" id="frontal_raise_knee_up_R2" value="16" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="frontal_raise_knee_up_W3">W3:</label>
+									<input type="number" name="frontal_raise_knee_up_W3" id="frontal_raise_knee_up_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="frontal_raise_knee_up_R3">R3:</label>
+													
+										<input type="number" name="lateral_raise_knee_up_R3" id="lateral_raise_knee_up_R3" value="16" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\shoulder\frontalraisekneeup.jpg" alt="lateral_raise_knee_up" class="exercise" />
+
+						</div>                    
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1:</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2:</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+										
+										<label for="plank_t3">T3:</label>
+													
+										<input type="number" name="plank_t3" id="plank_t3" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+					
+
+							
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+					</div> <!--circuit #1 ends here-->
+					
+					<div class="circuit"><h4>Circuit #2</h4>		
+					
+						<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Sumo Squat</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sumosquat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="sumo_squat_W1">W1:</label>
+								<input type="number" name="sumo_squat_W1" id="sumo_squat_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="sumo_squat_R1">R1:</label>
+											
+								<input type="number" name="sumo_squat_R1" id="sumo_squat_R1" value="15" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_W2">W2:</label>
+							<input type="number" name="sumo_squat_W2" id="sumo_squat_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_R2">R2:</label>
+											
+								<input type="number" name="sumo_squat_R2" id="sumo_squat_R2" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="sumo_squat_W3">W3:</label>
+							<input type="number" name="sumo_squat_W3" id="sumo_squat_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="sumo_squat_R3">R3:</label>
+											
+								<input type="number" name="sumo_squat_R3" id="sumo_squat_R3" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\glutes\sumosquat.jpg" alt="sumo_squat" class="exercise" />
+
+				</div>                    
+				
+				<div class="position1">
+					 <div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Step Ups</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dstepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="stepup_R1">R1:</label>
+											
+								<input type="number" name="stepup_R1" id="stepup_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="stepup_R2">R2:</label>
+											
+								<input type="number" name="stepup_R2" id="stepup_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="stepup_R3">R3:</label>
+											
+								<input type="number" name="stepup_R3" id="stepup_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="stepup" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Extension</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legextension" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									 
+						</div>			
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="leg_extension_W1">W1:</label>
+								<input type="number" name="leg_extension_W1" id="leg_extension_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="leg_extension_R1">R1:</label>
+											
+								<input type="number" name="leg_extension_R1" id="leg_extension_R1" value="15" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="leg_extension_W2">W2:</label>
+							<input type="number" name="leg_extension_W2" id="leg_extension_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="leg_extension_R2">R2:</label>
+											
+								<input type="number" name="leg_extension_R2" id="leg_extension_R2" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="leg_extension_W3">W3:</label>
+							<input type="number" name="leg_extension_W3" id="leg_extension_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="leg_extension_R3">R3:</label>
+											
+								<input type="number" name="leg_extension_R3" id="leg_extension_R3" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\quads\legextension.jpg" alt="leg_extension" class="exercise" />
+
+				</div>
+					
+					
+					
+				</div> <!--circuit #2 ends here-->
+											
+											
+											
+				</div>	<!--collapsible B ends here-->
+								
+							
+					
+				</div><!--Rutinas 2 Ends here--> 
+				
+				<!--Workout 3 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-losing3.jpg"/>
+									<h2>Workout Plan #3</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Routine A</h3>
+								
+												<div class="circuit"><h4>Circuit #1</h4>		
+						
+				<div class="position1">
+							<div data-role="header" data-fullscreen="true"  data-theme="b">
+										<h1>Shoulder Press Squat</h1>
+																
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#shoulderpresssquat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="shoulder_press_squat_W1">W1:</label>
+									<input type="number" name="shoulder_press_squat_W1" id="shoulder_press_squat_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="shoulder_press_squat_R1">R1:</label>
+												
+									<input type="number" name="shoulder_press_squat_R1" id="shoulder_press_squat_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="shoulder_press_squat_W2">W2:</label>
+								<input type="number" name="shoulder_press_squat_W2" id="shoulder_press_squat_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="shoulder_press_squat_R2">R2:</label>
+												
+									<input type="number" name="shoulder_press_squat_R2" id="shoulder_press_squat_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="shoulder_press_squat_W3">W3:</label>
+								<input type="number" name="shoulder_press_squat_W3" id="shoulder_press_squat_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="shoulder_press_squat_R3">R3:</label>
+												
+									<input type="number" name="shoulder_press_squat_R3" id="shoulder_press_squat_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\shoulder\shoulderpresssquat.jpg" alt="shoulder_press_squat" class="exercise" />
+
+						</div>
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Plank</h1>
+																
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1:</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2:</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+										
+										<label for="plank_t3">T3:</label>
+													
+										<input type="number" name="plank_t3" id="plank_t3" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+					
+
+							
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						
+					</div> <!--circuit #1 ends here-->
+					
+					<div class="circuit"><h4>Circuit #2</h4>		
+					
+						<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="b">
+							<h1>Push Ups</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#pushups" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+						</div>			
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+								<label for="push_ups_R1">R1:</label>
+											
+								<input type="number" name="push_ups_R1" id="push_ups_R1" value="10" maxlength="3"  data-theme="a"/>
+					
+
+										<label for="push_ups_R2">R2:</label>
+											
+								<input type="number" name="push_ups_R2" id="push_ups_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+					
+							
+
+										<label for="push_ups_R3">R3:</label>
+											
+								<input type="number" name="push_ups_R3" id="push_ups_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\chest\pushupscomplete.jpg" alt="push_ups" class="exercise" />
+
+				</div>
+				
+				<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Dumbell Back Row</h1>
+								
+						
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dumbbellrow" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+							
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="dumbbell_back_row_W1">W1:</label>
+										<input type="number" name="dumbbell_back_row_W1" id="dumbbell_back_row_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="dumbbell_back_row_R1">R1:</label>
+													
+										<input type="number" name="dumbbell_back_row_R1" id="dumbbell_back_row_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="dumbbell_back_row_W2">W2:</label>
+									<input type="number" name="dumbbell_back_row_W2" id="dumbbell_back_row_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="dumbbell_back_row_R2">R2:</label>
+													
+										<input type="number" name="dumbbell_back_row_R2" id="dumbbell_back_row_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							<div>
+								<div >
+									<label for="dumbbell_back_row_W3">W3:</label>
+									<input type="number" name="dumbbell_back_row_W3" id="dumbbell_back_row_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="dumbbell_back_row_R3">R3:</label>
+													
+										<input type="number" name="dumbbell_back_row_R3" id="dumbbell_back_row_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+							
+					
+								<img src="img\back\backdumbellrow.jpg" alt="dumbbell_back_row" class="exercise" />
+
+						</div> 
+										
+					
+				</div> <!--circuit #2 ends here-->
+				
+					<div class="circuit"><h4>Circuit #3</h4>	
+
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Dumbbell Hammer Bicep Curls</h1>
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#hbicepcurl" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+									
+							</div>
+					</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="dumbbell_hammer_bicep_curl_W1">W1:</label>
+									<input type="number" name="dumbbell_hammer_bicep_curl_W1" id="dumbbell_hammer_bicep_curl_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="dumbbell_hammer_bicep_curl_R1">R1:</label>
+												
+									<input type="number" name="dumbbell_hammer_bicep_curl_R1" id="dumbbell_hammer_bicep_curl_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_hammer_bicep_curl_W2">W2:</label>
+								<input type="number" name="dumbbell_hammer_bicep_curl_W2" id="dumbbell_hammer_bicep_curl_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_hammer_bicep_curl_R2">R2:</label>
+												
+									<input type="number" name="dumbbell_hammer_bicep_curl_R2" id="dumbbell_hammer_bicep_curl_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="dumbbell_hammer_bicep_curl_W3">W3:</label>
+								<input type="number" name="dumbbell_hammer_bicep_curl_W3" id="dumbbell_hammer_bicep_curl_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="dumbbell_hammer_bicep_curl_R3">R3:</label>
+												
+									<input type="number" name="dumbbell_hammer_bicep_curl_R3" id="dumbbell_hammer_bicep_curl_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\bicep\bicepcurldumbbells.jpg" alt="dumbbell_hammer_bicep_curl" class="exercise" />
+
+					</div> 
+					
+				<div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Dips</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dips" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>		
+				</div>
+							         <!--dips button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+					
+
+								<label for="dips_R1">R1:</label>
+											
+								<input type="number" name="dips_R1" id="dips_R1" value="10" maxlength="3"  data-theme="a"/>
+							
+					
+
+										<label for="dips_R2">R2:</label>
+											
+								<input type="number" name="dips_R2" id="dips_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+					
+
+										<label for="dips_R3">R3:</label>
+											
+								<input type="number" name="dips_R3" id="dips_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tricep\dips.jpg" alt="dips" class="exercise" />
+
+				</div> 
+					
+					
+					
+					
+					</div> <!--circuit #3 ends here-->
+							
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Routine B </h3>
+									<div class="circuit"><h4>Circuit #1</h4>		
+							<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Goblet Squat</h1>
+							
+								<a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" 
+					data-icon="edit" data-theme="c" data-iconpos="notext">Instructions</a>
+					
+					<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					  <p>Use a Kettle-bell or a Dumbbell</p>
+					</div>
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#gobletsquat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="goblet_squat_W1">W1:</label>
+									<input type="number" name="goblet_squat_W1" id="goblet_squat_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="goblet_squat_R1">R1:</label>
+												
+									<input type="number" name="goblet_squat_R1" id="goblet_squat_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="goblet_squat_W2">W2:</label>
+								<input type="number" name="goblet_squat_W2" id="goblet_squat_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="goblet_squat_R2">R2:</label>
+												
+									<input type="number" name="goblet_squat_R2" id="goblet_squat_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="goblet_squat_W3">W3:</label>
+								<input type="number" name="goblet_squat_W3" id="goblet_squat_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="goblet_squat_R3">R3:</label>
+												
+									<input type="number" name="goblet_squat_R3" id="goblet_squat_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\glutes\gobletsquat.jpg" alt="goblet_squat" class="exercise" />
+
+						</div>
+						
+						<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+							<h1>Walking Lunges</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lunges" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+						</div>			
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="lunges_W1">W1:</label>
+								<input type="number" name="lunges_W1" id="lunges_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="lunges_R1">R1:</label>
+											
+								<input type="number" name="lunges_R1" id="lunges_R1" value="10" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="lunges_W2">W2:</label>
+							<input type="number" name="lunges_W2" id="lunges_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="lunges_R2">R2:</label>
+											
+								<input type="number" name="lunges_R2" id="lunges_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="lunges_W3">W3:</label>
+							<input type="number" name="lunges_W3" id="lunges_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="lunges_R3">R3:</label>
+											
+								<input type="number" name="lunges_R3" id="lunges_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\quads\lunges.jpg" alt="lunges" class="exercise" />
+
+				</div>                    
+						
+						
+						
+				</div> <!--circuit #1 ends here-->
+					
+				<div class="circuit"><h4>Circuit #2</h4>		
+					
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Extension</h1>
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legextension" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="leg_extension_W1">W1:</label>
+										<input type="number" name="leg_extension_W1" id="leg_extension_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="leg_extension_R1">R1:</label>
+													
+										<input type="number" name="leg_extension_R1" id="leg_extension_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="leg_extension_W2">W2:</label>
+									<input type="number" name="leg_extension_W2" id="leg_extension_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="leg_extension_R2">R2:</label>
+													
+										<input type="number" name="leg_extension_R2" id="leg_extension_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="leg_extension_W3">W3:</label>
+									<input type="number" name="leg_extension_W3" id="leg_extension_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="leg_extension_R3">R3:</label>
+													
+										<input type="number" name="leg_extension_R3" id="leg_extension_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\quads\legextension.jpg" alt="leg_extension" class="exercise" />
+
+						</div> 		
+					
+							<div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>					
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="15" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="15" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+							
+				</div> <!--circuit #2 ends here-->
+				
+				<div class="circuit"><h4>Circuit #3</h4>	
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Prone Leg Curl</h1>
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legcurl" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+								</div>
+							</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="prone_leg_curl_W1">W1:</label>
+									<input type="number" name="prone_leg_curl_W1" id="prone_leg_curl_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="prone_leg_curl_R1">R1:</label>
+												
+									<input type="number" name="prone_leg_curl_R1" id="prone_leg_curl_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="prone_leg_curl_W2">W2:</label>
+								<input type="number" name="prone_leg_curl_W2" id="prone_leg_curl_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="prone_leg_curl_R2">R2:</label>
+												
+									<input type="number" name="prone_leg_curl_R2" id="prone_leg_curl_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="prone_leg_curl_W3">W3:</label>
+								<input type="number" name="prone_leg_curl_W3" id="prone_leg_curl_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="prone_leg_curl_R3">R3:</label>
+												
+									<input type="number" name="prone_leg_curl_R3" id="prone_leg_curl_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\hamstrings\pronelegcurl.jpg" alt="prone_leg_curl" class="exercise" />
+
+					</div> 
+					
+							
+					<div class="position1">		
+				  				<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Wall Squat</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#wallsquat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+								</div>				
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="wall_squat_R1">R1:</label>
+											
+								<input type="number" name="wall_squat_R1" id="wall_squat_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="wall_squat_R2">R2:</label>
+											
+								<input type="number" name="wall_squat_R2" id="wall_squat_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="wall_squat_R3">R3:</label>
+											
+								<input type="number" name="wall_squat_R3" id="wall_squat_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\quads\wallsquat.jpg" alt="wall_squat" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+					
+				</div> <!--circuit #3 ends here-->			
+								
+					</div>	
+					
+				
+					
+				</div><!--Rutinas 3 Ends here--> 
+				
+				<!--Workout 4 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-losing4.jpg"/>
+									<h2>Workout Plan #4</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Routine A</h3>
+								
+								
+					<div class="circuit"><h4>Circuit #1</h4>	
+					
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Leg Extension</h1>
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legextension" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="leg_extension_W1">W1:</label>
+										<input type="number" name="leg_extension_W1" id="leg_extension_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="leg_extension_R1">R1:</label>
+													
+										<input type="number" name="leg_extension_R1" id="leg_extension_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="leg_extension_W2">W2:</label>
+									<input type="number" name="leg_extension_W2" id="leg_extension_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="leg_extension_R2">R2:</label>
+													
+										<input type="number" name="leg_extension_R2" id="leg_extension_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="leg_extension_W3">W3:</label>
+									<input type="number" name="leg_extension_W3" id="leg_extension_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="leg_extension_R3">R3:</label>
+													
+										<input type="number" name="leg_extension_R3" id="leg_extension_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+					
+								<img src="img\quads\legextension.jpg" alt="leg_extension" class="exercise" />
+
+						</div> 		
+						
+						
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+									<h1>Leg Press</h1>							
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legpress" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+								</div>
+							</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="leg_press_W1">W1:</label>
+									<input type="number" name="leg_press_W1" id="leg_press_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="leg_press_R1">R1:</label>
+												
+									<input type="number" name="leg_press_R1" id="leg_press_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_press_W2">W2:</label>
+								<input type="number" name="leg_press_W2" id="leg_press_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_press_R2">R2:</label>
+												
+									<input type="number" name="leg_press_R2" id="leg_press_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_press_W3">W3:</label>
+								<input type="number" name="leg_press_W3" id="leg_press_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_press_R3">R3:</label>
+												
+									<input type="number" name="leg_press_R3" id="leg_press_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\quads\legpress.jpg" alt="leg_press" class="exercise" />
+
+					</div> 
+					
+					 <div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>SKi</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#ski" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="ski_R1">R1:</label>
+											
+								<input type="number" name="ski_R1" id="ski_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="ski_R2">R2:</label>
+											
+								<input type="number" name="ski_R2" id="ski_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="ski_R3">R3:</label>
+											
+								<input type="number" name="ski_R3" id="ski_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+
+				</div> 
+				
+			
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+					
+					
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+												<h1>Squats</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#singlesquats" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+							</div>				
+						</div>
+				
+				<div data-role="fieldcontain" >
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+					
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+						
+				</div> 		
+						
+						 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						
+					</div ><!--circuit #1 ends here-->
+						
+					<div class="circuit"><h4>Circuit #2</h4>	
+					
+					
+							<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+							<h1>Leg Curl</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#legcurl" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+								</div>	
+					</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="leg_curl_W1">W1:</label>
+									<input type="number" name="leg_curl_W1" id="leg_curl_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="leg_curl_R1">R1:</label>
+												
+									<input type="number" name="leg_curl_R1" id="leg_curl_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_curl_W2">W2:</label>
+								<input type="number" name="leg_curl_W2" id="leg_curl_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_curl_R2">R2:</label>
+												
+									<input type="number" name="leg_curl_R2" id="leg_curl_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="leg_curl_W3">W3:</label>
+								<input type="number" name="leg_curl_W3" id="leg_curl_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="leg_curl_R3">R3:</label>
+												
+									<input type="number" name="leg_curl_R3" id="leg_curl_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\hamstrings\pronelegcurl.jpg" alt="leg_curl" class="exercise" />
+
+					</div> 
+					
+					
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Stiff Barbell Dead-lift</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sbdeathlift" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="stiff_Legged_barbell_deadlift _W1">W1:</label>
+										<input type="number" name="stiff_Legged_barbell_deadlift _W1" id="stiff_Legged_barbell_deadlift _W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="stiff_Legged_barbell_deadlift _R1">R1:</label>
+													
+										<input type="number" name="stiff_Legged_barbell_deadlift _R1" id="stiff_Legged_barbell_deadlift _R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="stiff_Legged_barbell_deadlift _W2">W2:</label>
+									<input type="number" name="stiff_Legged_barbell_deadlift _W2" id="stiff_Legged_barbell_deadlift _W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="stiff_Legged_barbell_deadlift _R2">R2:</label>
+													
+										<input type="number" name="stiff_Legged_barbell_deadlift _R2" id="stiff_Legged_barbell_deadlift _R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="stiff_Legged_barbell_deadlift _W3">W3:</label>
+									<input type="number" name="stiff_Legged_barbell_deadlift _W3" id="stiff_Legged_barbell_deadlift _W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="stiff_Legged_barbell_deadlift _R3">R3:</label>
+													
+										<input type="number" name="stiff_Legged_barbell_deadlift _R3" id="stiff_Legged_barbell_deadlift _R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+							
+					
+								<img src="img\hamstrings\deathlift.jpg" alt="stiff_Legged_barbell_deadlift " class="exercise" />
+
+						</div> 
+						
+					<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Jumping Jacks</h1>
+										
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#jumpingjacks" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										 </a>
+									
+									</div>
+								</div>
+								
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+						<div>
+										<div>
+										<label for="jumping_jacks_R1">R1:</label>
+											
+								<input type="number" name="jumping_jacks_R1" id="jumping_jacks_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R2">R2:</label>
+											
+								<input type="number" name="jumping_jacks_R2" id="jumping_jacks_R2" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R3">R3:</label>
+											
+								<input type="number" name="jumping_jacks_R3" id="jumping_jacks_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+											
+										</div>
+						</div>
+
+					
+			
+						<img src="img\tabata\jumpingjacks.jpg" alt="jumping_jacks" class="exercise" />
+					</div> <!---field contain -->
+				<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				
+				  
+				  <div class="position1">			
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Lunge Back Knee Up</h1>
+						<a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" 
+					data-icon="edit" data-theme="c" data-iconpos="notext">Instructions</a>
+					
+					<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;">
+					  <p>Do  <strong>8 repetitions</strong> in each leg</p>
+					</div>
+							
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lbackkneeup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="Lunge_back_knee_up_R1">R1:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R1" id="Lunge_back_knee_up_R1" value="16" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="Lunge_back_knee_up_R2">R2:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R2" id="Lunge_back_knee_up_R2" value="16" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="Lunge_back_knee_up_R3">R3:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R3" id="Lunge_back_knee_up_R3" value="16" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\Lunge_back_knee_up.jpg" alt="Lunge_back_knee_up" class="exercise" />
+
+				</div> 
+				 
+												
+						</div ><!--circuit #2 ends here-->
+									 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Routine B </h3>
+								
+												<div class="circuit"><h4>Circuit #1</h4>	
+					
+					<div class="position1">		
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Up and Downs</h1>
+									
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#updowns" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="up_and_downs_R1">R1:</label>
+											
+								<input type="number" name="up_and_downs_R1" id="up_and_downs_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="up_and_downs_R2">R2:</label>
+											
+								<input type="number" name="up_and_downs_R2" id="up_and_downs_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="up_and_downs_R3">R3:</label>
+											
+								<input type="number" name="up_and_downs_R3" id="up_and_downs_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+
+				</div> 
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1"> 
+				    <div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>					
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Front Lat Pull Down</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frontlat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="front_lat_pull_down_W1">W1:</label>
+										<input type="number" name="front_lat_pull_down_W1" id="front_lat_pull_down_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="front_lat_pull_down_R1">R1:</label>
+													
+										<input type="number" name="front_lat_pull_down_R1" id="front_lat_pull_down_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="front_lat_pull_down_W2">W2:</label>
+									<input type="number" name="front_lat_pull_down_W2" id="front_lat_pull_down_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="front_lat_pull_down_R2">R2:</label>
+													
+										<input type="number" name="front_lat_pull_down_R2" id="front_lat_pull_down_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="front_lat_pull_down_W3">W3:</label>
+									<input type="number" name="front_lat_pull_down_W3" id="front_lat_pull_down_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="front_lat_pull_down_R3">R3:</label>
+													
+										<input type="number" name="front_lat_pull_down_R3" id="front_lat_pull_down_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\back\latpulldown.jpg" alt="front_lat_pull_down" class="exercise" />
+
+						</div> 
+							
+
+					</div> <!--circuit #1 ends here-->		
+						
+						<div class="circuit">	<h4>Circuit #2</h4>	
+								<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Triceps Dumbbell Kick Back</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dumbbellkickback" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+								</div>
+							</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										<label for="triceps_kick_back_W1">W1:</label>
+										<input type="number" name="triceps_kick_back_W1" id="triceps_kick_back_W1" value="0" maxlength="3" data-theme="c"/>
+							
+
+										<label for="triceps_kick_back_R1">R1:</label>
+													
+										<input type="number" name="triceps_kick_back_R1" id="triceps_kick_back_R1" value="10" maxlength="3"  data-theme="a"/>
+									</div>
+							</div>
+							<div>
+								<div >
+									<label for="triceps_kick_back_W2">W2:</label>
+									<input type="number" name="triceps_kick_back_W2" id="triceps_kick_back_W2" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="triceps_kick_back_R2">R2:</label>
+													
+										<input type="number" name="triceps_kick_back_R2" id="triceps_kick_back_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							<div>
+								<div >
+									<label for="triceps_kick_back_W3">W3:</label>
+									<input type="number" name="triceps_kick_back_W3" id="triceps_kick_back_W3" value="0" maxlength="3" data-theme="c" />
+							
+
+												<label for="triceps_kick_back_R3">R3:</label>
+													
+										<input type="number" name="triceps_kick_back_R3" id="triceps_kick_back_R3" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+							
+					
+								<img src="img\tricep\dumbbellkickback.jpg" alt="triceps_kick_back" class="exercise" />
+
+						</div> 
+						
+								<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Dumbbell Tricep Extension</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#dtricepextension" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+					</div>		         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								<label for="dumbell_tricep_extension_W1">W1:</label>
+								<input type="number" name="dumbell_tricep_extension_W1" id="dumbell_tricep_extension_W1" value="0" maxlength="3" data-theme="c"/>
+					
+
+								<label for="dumbell_tricep_extension_R1">R1:</label>
+											
+								<input type="number" name="dumbell_tricep_extension_R1" id="dumbell_tricep_extension_R1" value="10" maxlength="3"  data-theme="a"/>
+							</div>
+					</div>
+					<div>
+						<div >
+							<label for="dumbell_tricep_extension_W2">W2:</label>
+							<input type="number" name="dumbell_tricep_extension_W2" id="dumbell_tricep_extension_W2" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="dumbell_tricep_extension_R2">R2:</label>
+											
+								<input type="number" name="dumbell_tricep_extension_R2" id="dumbell_tricep_extension_R2" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					<div>
+						<div >
+							<label for="dumbell_tricep_extension_W3">W3:</label>
+							<input type="number" name="dumbell_tricep_extension_W3" id="dumbell_tricep_extension_W3" value="0" maxlength="3" data-theme="c" />
+					
+
+										<label for="dumbell_tricep_extension_R3">R3:</label>
+											
+								<input type="number" name="dumbell_tricep_extension_R3" id="dumbell_tricep_extension_R3" value="10" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tricep\tricepoverheaddumbbell.jpg" alt="dumbell_tricep_extension" class="exercise" />
+
+				</div> 
+				
+				
+					<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Rear Lateral Raise</h1>								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#rearlateralraise" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									<label for="Rear Lateral Raise_W1">W1:</label>
+									<input type="number" name="Rear Lateral Raise_W1" id="Rear Lateral Raise_W1" value="0" maxlength="3" data-theme="c"/>
+						
+
+									<label for="Rear Lateral Raise_R1">R1:</label>
+												
+									<input type="number" name="Rear Lateral Raise_R1" id="Rear Lateral Raise_R1" value="10" maxlength="3"  data-theme="a"/>
+								</div>
+						</div>
+						<div>
+							<div >
+								<label for="Rear Lateral Raise_W2">W2:</label>
+								<input type="number" name="Rear Lateral Raise_W2" id="Rear Lateral Raise_W2" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="Rear Lateral Raise_R2">R2:</label>
+												
+									<input type="number" name="Rear Lateral Raise_R2" id="Rear Lateral Raise_R2" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						<div>
+							<div >
+								<label for="Rear Lateral Raise_W3">W3:</label>
+								<input type="number" name="Rear Lateral Raise_W3" id="Rear Lateral Raise_W3" value="0" maxlength="3" data-theme="c" />
+						
+
+											<label for="Rear Lateral Raise_R3">R3:</label>
+												
+									<input type="number" name="Rear Lateral Raise_R3" id="Rear Lateral Raise_R3" value="10" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\shoulder\reardeltoidflys.jpg" alt="Rear Lateral Raise" class="exercise" />
+
+					</div> 
+										
+					</div ><!--circuit #2 ends here-->
+								
+					</div><!--colapsible B ends here-->
+					
+					
+					
+				</div><!--Rutinas 4 Ends here--> 
+				
+				
+
+			
+		</div><!--content end-->
+		
+     </div><!--page-->			
+
+
+<!--Dialog chest press-->
+								<div data-role="page"
+									id="chest"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Chest Press</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\chest\dumbbellchestpress.jpg" alt="Chest_Press" class="exercise" />
+									
+										<p> Lie on the ball keeping
+									your back flat. Hold the
+									dumbbells over your
+									upper chest with your
+									arms straight and positioned
+									a little more
+									than shoulder-width
+									apart. Slowly lower
+									the dumbbells to make
+									slight contact with
+									your upper chest area.
+									Then drive the weight
+									straight up from your
+									chest until your elbows
+									are nearly extended.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/chest/chestpress.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+								
+								
+<!--Dumbbell Bicep Curl Knee Up-->
+								<div data-role="page"
+									id="dumbbellkneeup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dumbbell Bicep Curl with Knee Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+										<img src="img\bicep\bicepcurlkneeup.jpg" alt="dumbbell_bicep_curl_with_knee_up" class="exercise" />
+										<p> 
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/bicep/bicepcurlkneeup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Tricep Cable Push Down-->
+								<div data-role="page"
+									id="pushdown"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Tricep Cable Push Down</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tricep\triceppushdown.jpg" alt="tricep_cable_push_down" class="exercise" />
+										<p>Attach a short
+										straight bar to a high
+										cable pulley. Grip the
+										bar palms facing down,
+										hands about 10 inches
+										apart. Keep your body
+										steady and your elbows
+										close to the sides of
+										your body as you push
+										the bar down to the
+										front of your thighs.
+										Squeeze and return to
+										the starting position
+										using the same motion. </p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/triceps/triceppushdown.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Dialog Dumbell tricep extension-->
+								<div data-role="page"
+									id="dtricepextension"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dumbbell Tricep Extension</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tricep\tricepoverheaddumbbell.jpg" alt="tricep_overhead" class="exercise" />
+									
+										<p>Hold a dumbbell with
+									both hands at one
+									end behind your head.
+									Stand straight, palms
+									facing up and gripping
+									the dumbbell around
+									the top plate. Raise
+									the dumbbell overhead
+									to arm’s length, keeping
+									your elbows close
+									to your head during
+									the entire movement.
+									Lower dumbbell to the
+									starting position in a
+									semicircular motion
+									until your forearms
+									touch your biceps.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/triceps/dtricepoverhead.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Front Lat Pull Down-->								
+								<div data-role="page"
+									id="frontlat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Front Lat Pull Down</h1>
+									</div>
+									<div data-role="content" 
+									>									
+										
+										<img src="img\back\latpulldown.jpg" alt="Lat_pull_down" class="exercise" />
+										
+									<p>Attach a long bar to
+									the lat pull down machine
+									and adjust the
+									kneepads. Hold lat
+									bar with hands about
+									35” apart. Pull the
+									bar straight down to
+									the top of your chest,
+									then slowly release to
+									the starting position.</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/back/latpulldown.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Dialog Dumbbell Military Press press-->
+								<div data-role="page"
+									id="dumbbellshoulderpress"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dumbbell Military Press</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\shoulder\dumbbellshoulderpress.jpg" alt="Dumbbell_Military_Press" class="exercise" />
+										<p>Hold a dumbbell in
+											each hand, just above
+											shoulder-level. Press
+											the weights up until
+											your arms are almost
+											straight. Then slowly
+											lower the dumbbells to
+											the starting position.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/dumbbellshoulderpress.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Sumo  Squat with lateral Raises-->
+								<div data-role="page"
+									id="sumolateral"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sumo Squat with Lateral Raises</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\shoulder\sumosquatlateralraiseo.jpg" alt="sumo_squat_with_lateral_raise" class="exercise" />
+
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/squatlateralraise.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>		
+								
+<!--Alternating Step Up-->
+								<div data-role="page"
+									id="dstepup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Alternating Step Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tabata\stepup.jpg" alt="alternating_step_up" class="exercise" />
+									<p></p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/dumbbellstepup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+								
+<!--Dialog Leg Press-->
+								<div data-role="page"
+									id="legpress"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Leg Press</h1>
+									</div>
+									<div data-role="content" 
+									>
+								         
+										<img src="img\quads\legpress.jpg" alt="leg_press" class="exercise" />
+										<p>
+										Sit with the knees
+										flexed about 90 degrees
+										and your feet
+										about shoulder-width
+										apart on the platform,
+										toes pointed slightly
+										outward. Extend the
+										legs, then return slowly
+										to starting position.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/quads/legpress.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Side Step Up-->
+								<div data-role="page"
+									id="sidestep"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Side Step Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\sidestepups.jpg" alt="side_step_up" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/sidestep.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>							
+								
+<!--Dialog Leg Curl-->
+								<div data-role="page"
+									id="legcurl"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Leg Curl</h1>
+									</div>
+									<div data-role="content" 
+									>
+								         
+										<img src="img\hamstrings\pronelegcurl.jpg" alt="Leg_Curls" class="exercise" />
+										<p>Lie facedown with your
+										ankles under the pad
+										and grip the handles.
+										Curl your legs up until
+										your hamstrings are
+										fully contracted. Then
+										slowly straighten the
+										legs, lowering them
+										back to the starting
+										position.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Sumo  Squat with Up right Row-->
+								<div data-role="page"
+									id="sumoupright"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sumo Squat Up Right Row</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\shoulder\squatuprightrow.jpg" alt="sumo_squat_with_upright_row" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/squatuprightrow.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>					
+
+
+<!--Dialog Standing Fly-->
+								<div data-role="page"
+									id="standingfly"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Standing Fly</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\chest\cablefly.jpg" alt="standing_fly" class="exercise" />
+									
+										<p> 
+										Hold a cable
+										in each hand at shoulder
+										level with arms
+										extended out to the
+										sides of the chest.
+										Keep the arms nearly
+										straight as you push
+										the cables forward
+										and together directly
+										above the chest, palms
+										facing each other. Then
+										move your arms to
+										the starting position
+										and repeat.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/chest/cablefly.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>		
+<!--Dialog Cable Bicep Curl-->
+								<div data-role="page"
+									id="cablecurl"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Cable Bicep Curl</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\bicep\bicepcurlwithband.jpg" alt="cable_bicep_curl" class="exercise" />
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/bicep/bicepcurlband.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Boxing with Dumbbells  -->
+								<div data-role="page"
+									id="boxing"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1></h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\shoulder\boxing.jpg" alt="boxing_with_dumbbells" class="exercise" />
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/boxing.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>									
+<!--Dialog Cable Push Down-->
+								<div data-role="page"
+									id="pushdown"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Tricep Cable Push Down</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tricep\triceppushdown.jpg" alt="tricep_cable_push_down" class="exercise" />
+									
+										<p>Attach a short
+									straight bar to a high
+									cable pulley. Grip the
+									bar palms facing down,
+									hands about 10 inches
+									apart. Keep your body
+									steady and your elbows
+									close to the sides of
+									your body as you push
+									the bar down to the
+									front of your thighs.
+									Squeeze and return to
+									the starting position
+									using the same motion.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/triceps/triceppushdown.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Stiff-Legged DumbellDeath lift-->
+								<div data-role="page"
+									id="sdeathlift"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Stiff-Legged Dumbbell Deadlift</h1>
+									</div>
+									<div data-role="content" 
+									>
+								        <img src="img\hamstrings\.jpg" alt="stiff_Legged_dumbbell_deadlift " class="exercise" />
+										<p>
+										Hold the dumbbels with hands
+										, your
+										back straight, trunk
+										flexed and head up. Use
+										your lower back muscles
+										to bend over until
+										the bar nears your
+										ankles, then return to
+										the standing position.
+
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/hamstrings/stiiflegged.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!-- Lunge Back Shoulder Press -->
+								<div data-role="page"
+									id="lungebackshoulder"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Lunge Back Shoulder Press</h1>
+									</div>
+									<div data-role="content" 
+									>
+										<img src="img\shoulder\lungeshoulderpress.jpg" alt="lunge_back_shoulder_press" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/lungebackshoulder.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!-- Frontal Raise Knee Up -->
+								<div data-role="page"
+									id="frontalraisekneeup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Frontal Raise Knee Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\shoulder\frontalraisekneeup.jpg" alt="frontal_raise_with_knee_up" class="exercise" />
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/frontalraisekneeup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--plank-->
+								<div data-role="page"
+									id="plank"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Plank</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/plank.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Dialog Sumo Squat  -->
+								<div data-role="page"
+									id="sumosquat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sumo Squat</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									  <img src="img\glutes\sumosquat.jpg" alt="sumo_squat " class="exercise" />
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/sumosquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>	
+<!--Dialog Leg Extension-->
+								<div data-role="page"
+									id="legextension"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Leg Extension</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\quads\legextension.jpg" alt="Leg_extension" class="exercise" />
+										<p>Sit with your feet under
+										the padded bar and
+										grasp the side handles.
+										Fully extend the legs,
+										then return slowly to
+										the starting position.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/quads/legextension.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Shoulder Press Squat-->
+								<div data-role="page"
+									id="shoulderpresssquat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Shoulder Press Squat</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+										<img src="img\shoulder\shoulderpresssquat.jpg" alt="shoulder_press_squat" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/squatshoulderpress.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>																									
+<!--Dialog Push Ups-->
+								<div data-role="page"
+									id="pushups"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Push Ups</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\chest\pushupscomplete.jpg" alt="push_ups" class="exercise" />
+									
+										<p> 
+										Begin face-down on
+										the floor, balancing on
+										your toes. Position the
+										hands slightly broader
+										than shoulder width
+										apart so your body
+										forms a straight line
+										with your arms extended.
+										Bend your elbows
+										and lower your body
+										until it is nearly touching
+										the floor, then push
+										your body up and back
+										to the starting position.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/chest/pushups.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>	
+<!--Dialog Dumbbell Bent Over Row-->
+								<div data-role="page"
+									id="dumbbellrow"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dumbbell Bent Over Row</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\back\backdumbellrow.jpg" alt="dumbbell_bent_over_row" class="exercise" />
+									
+										<p> 
+										Step forward with
+									left leg and bend over
+									at the hips. Grasp a
+									dumbbell in your right
+									hand and place left elbow
+									on your left knee or on a becnh ,
+									keeping the lower back
+									almost parallel to the
+									floor and the head facing
+									down. Keep your
+									arm close to the side
+									of your body as you
+									pull the dumbbell up to
+									your side. Squeeze and
+									return to starting position.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/back/backrow.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Dialog Dumbbell Hammer Bicep Curl-->
+								<div data-role="page"
+									id="hbicepcurl"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dumbbell Hammer Bicep Curl</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\bicep\bicepcurldumbbells.jpg" alt="Bicep_curl" class="exercise" />
+										<p>Using a palms facing inside grip
+										with arms extended,
+										curl dumbbell in right
+										hand up as far as possible,
+										then return to
+										the initial position. Repeat
+										with left arm,
+										then switch to your
+										left arm.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/bicep/hammerbicep.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>									
+<!-- Dips -->
+								<div data-role="page"
+									id="dips"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Dips</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tricep\dips.jpg" alt="dips" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/triceps/dips.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>	
+<!-- Goblet -->
+								<div data-role="page"
+									id="gobletsquat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Goblet Squat</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\glutes\gobletsquat.jpg" alt="goblet_squat" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/gobletsquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>		
+<!--Dialog Walking Lunges-->
+								<div data-role="page"
+									id="lunges"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Walking Lunges</h1>
+									</div>
+									<div data-role="content" 
+									>
+								         
+									<img src="img\quads\lunges.jpg" alt="lunges" class="exercise" />	
+										<p>
+										Stand with a dumbbell
+										in each hand.
+										Stay upright as you
+										step forward with the
+										right leg, bending both
+										knees and descending
+										until the forward thigh
+										is parallel to the floor.
+										Push up and step forward
+										with the other
+										leg and repeat.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/quads/walkinglunges.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!-- Swing-->
+								<div data-role="page"
+									id="swing"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Swing</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/swing.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>															
+<!-- Wall Squat -->
+								<div data-role="page"
+									id="wallsquat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Wall Squat</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\quads\wallsquat.jpg" alt="wall_squat" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/wallsquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Dialog Sky-->
+								<div data-role="page"
+									id="sky"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sky</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\sky.jpg" alt="sky" class="exercise" />
+									
+										<p>
+										Sidestep to the right as fast as possible, touching the floor with one hand. Alternate to the left
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/sky.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Dialog Ski-->
+								<div data-role="page"
+									id="ski"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Ski</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+								<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+									
+										<p>
+										Sidestep to the right as fast as possible, touching the floor with one hand. Alternate to the left
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/ski.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--single Squats  -->
+								<div data-role="page"
+									id="singlesquats"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Squats</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/freesquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Stiff-Legged Barbell Death lift-->
+								<div data-role="page"
+									id="sbdeathlift"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Stiff-Legged Barbell Deadlift</h1>
+									</div>
+									<div data-role="content" 
+									>
+								        <img src="img\hamstrings\deathlift.jpg" alt="stiff_Legged_barbell_deadlift " class="exercise" />
+										<p>
+										Hold the bar with hands
+										about 15” apart, your
+										back straight, trunk
+										flexed and head up. Use
+										your lower back muscles
+										to bend over until
+										the bar nears your
+										ankles, then return to
+										the standing position.
+
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/hamstrings/stiffdeadlift.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Dialog Jumping Jacks-->
+								<div data-role="page"
+									id="jumpingjacks"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jumping Jacks</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\jumpingjacks.jpg" alt="sky" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jumpingjacks.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!-- Lunge Back Knee Up -->
+								<div data-role="page"
+									id="lbackkneeup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Lunge Back Knee Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tabata\Lunge_back_knee_up.jpg" alt="Lunge_back_knee_up" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/lungebackkneeup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+<!--Up and Downs-->
+								<div data-role="page"
+									id="updowns"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Up and Downs</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     
+									 <img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/updowns.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Triceps Dumbbell Kick Back  -->
+								<div data-role="page"
+									id="dumbbellkickback"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Triceps Dumbbell Kick Back</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tricep\dumbbellkickback.jpg" alt="triceps_kick_back" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/triceps/tricepskickback.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Rear Lateral Raise-->
+								<div data-role="page"
+									id="rearlateralraise"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Rear Lateral Raise</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\shoulder\reardeltoidflys.jpg" alt="Rear Lateral Raise" class="exercise" />
+										<p>
+										Bend over with your
+										back close to parallel
+										with the floor, letting
+										your arms hang down
+										to the sides of your
+										body with the palms
+										facing each other and
+										the elbows slightly
+										bent. Raise the dumbbells
+										out to shoulder
+										height, pause at the
+										top and slowly lower
+										the dumbbells back to
+										the starting position.
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/reardeltoidfly.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>																	
+								<!--Video page 1-->
+			
+			<div data-role="page" id="adv" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="a" >
+										<h3>
+											Toning & Losing 5lbs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>Toning & Losing 5lbs</h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											<a  onclick="playVideo('file:///extsdcard/losing1a.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Routine A</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/secuencia01.mp4')">
+											<img src="img/losingb.jpg"/>
+											<h2>Routine B</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											
+									</ul>
+										
+										
+									</div>
+									
+								</div>
+								
+						<!--Video Page ends here-->		
+			
+								
+</body>
+</html>			

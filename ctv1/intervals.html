@@ -1,0 +1,6440 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Californitraining</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 " />
+
+
+	<link rel="stylesheet" href="css/jquery.mobile.css" />
+	<link rel="stylesheet" href="themes/californitraining.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile.js"></script>
+
+	<script src="js/myscript.js"></script>
+	<link rel="stylesheet" href="css/mystyles.css" />
+	
+
+
+	
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="video.js"></script>
+
+		<script type="text/javascript">
+			function init(){
+			document.addEventListener("deviceready", console.log('ready'), true);
+			}
+		 
+			function playVideo(vidUrl) {
+			window.plugins.videoPlayer.play(vidUrl);
+			}
+		</script> 
+		
+	
+	
+	
+	
+	<script>
+
+
+var funTime = {
+// music
+readymp3:   "mp3/0017_mgun_f_02_multiple_shots.mp3",
+workoutmp3: "mp3/0003_voice_female_go_02.mp3", 
+finishmp3:  "mp3/0047_boxing_bell_ring.mp3",
+
+// timers
+prepTime:   5,
+prepMsg:    "Get Ready ...",
+workTime:   50, 
+workMsg:    "Go ...",
+doneMsg:    "Good Job!!!",
+
+
+// Objects and event functions
+popup:      "#popup2",
+counter:    "#counter",
+counterMsg:    "#counterMsg",
+timer:      1,
+pausing:    false,
+
+ 
+// media prop, methods
+media:      null,
+
+select:
+  function( src ) {
+    if (device.platform == 'Android') {
+      src = '/android_asset/www/' + src;
+    }
+    this.eject() ;
+    this.media = new Media( src );
+    this.media.play() ;
+    this.pausing = false ;
+  },
+
+play:
+  function() {
+    if( this.media ) {
+      this.media.play(); 
+    }
+  },
+
+pause: 
+  function() {
+    if( this.media )
+      this.media.pause();
+  },
+ 
+stop: 
+  function() {
+    if( this.media )
+      this.media.stop();
+  },
+ 
+eject: 
+  function() {
+    if( this.media) {
+      this.media.stop();
+      this.media.release() ;
+      this.media = null ;
+    }
+
+  },
+ 
+
+
+decCounter:
+  function() {
+    var cnt = 0 ;
+    cnt = $(funTime.counter).html() ;
+    $(counter).html( --cnt ) ;
+    if( cnt <= 0 )
+      clearInterval( funTime.timer ) ;
+
+    return cnt ;
+  },
+
+
+afterOpen:
+  function( event, ui ) {
+console.log("afteropen");
+    // prepTime setup
+    $("#btnCancel").click( funTime.btnCancel ) ;
+    $("#btnPause").click( funTime.btnPause ) ;
+    $("#btnStart").click( funTime.btnStart ) ;
+    $("#btnReset").click( funTime.btnReset ) ;
+    $("#btnClose").click( funTime.btnClose ) ;
+
+    $(funTime.counter).html( funTime.prepTime ) ;
+    $(funTime.counterMsg).html( funTime.prepMsg ) ;
+    $("#btnCancel").show() ;
+    $("#btnPause").hide() ;
+    $("#btnStart").hide() ;
+    $("#btnReset").hide() ;
+    $("#btnClose").hide() ;
+    funTime.select( funTime.readymp3 );
+    funTime.timer = setInterval( function() {
+       if( funTime.pausing ) return ;
+       if( funTime.decCounter() == 0 ) {
+        /// workTime setup
+        $("#btnCancel").show() ;
+        $("#btnPause").show() ;
+        $("#btnReset").show() ;
+        $("#btnStart").show() ;
+        $(funTime.counter).html( funTime.workTime ) ;
+        $(funTime.counterMsg).html( funTime.workMsg ) ;
+        funTime.select( funTime.workoutmp3 );
+        funTime.timer = setInterval( function() {
+          if( funTime.pausing ) return ;
+          if( funTime.decCounter() == 0 ) {
+            // wait for close
+            $(funTime.counter).html( "" ) ;
+            $(funTime.counterMsg).html( funTime.doneMsg ) ;
+            $("#btnPause").hide() ;
+            $("#btnStart").hide() ;
+            $("#btnReset").hide() ;
+            $("#btnClose").show() ;
+            funTime.select( funTime.finishmp3 );
+          }
+        }, 1000 ) ;
+
+      }
+    }, 1000) ;
+  },
+afterClose:
+  function() {
+console.log("afterclose") ;
+      clearInterval( funTime.timer ) ;
+      funTime.eject() ;
+    },
+
+btnCancel:
+    function() {
+      clearInterval( funTime.timer ) ;
+      $( funTime.popup ).popup( "close" );
+    }, 
+
+btnPause:
+    function() {
+      funTime.pausing = true ;
+      funTime.pause() ;
+
+    }, 
+
+btnStart:
+    function() {
+      funTime.pausing = false ;
+      funTime.play() ;
+
+    }, 
+
+btnReset:
+    function() {
+      $( funTime.counter).html( funTime.workTime ) ;
+    }, 
+
+btnClose:
+    function() {
+      $( funTime.popup ).popup( "close" );
+    } 
+
+
+} ;
+
+
+
+
+$( document ).on( "pageinit", "#page1",  function( event ) {
+console.log( "page1:pageinit") ; 
+    $( "#popup2").on("popupafteropen", funTime.afterOpen );
+    $( "#popup2").on("popupafterclose", funTime.afterClose );
+
+});
+
+</script>
+
+		
+	</head>
+
+	<body>
+<!-- Page: Cardio Intervals  header-->
+
+		<div id="page1" data-role="page" data-title="Cardio Intervals"  >
+					<div data-role="header"
+						data-position="fixed"
+							data-id="vs_header"
+							data-theme="d">
+								<h1>HIIT 50 Secs.</h1>
+					<a href="index.html" rel="external" data-icon="cali"	data-theme="a" data-iconpos="left" >Home</a>
+						
+					</div><!-- Cardio Intervals-->
+					
+					<ul data-role="listview" data-divider-theme="a" >
+					<div data-role="collapsible" data-inset="false" data-theme="a">
+						<h3>Instructions</h3>
+					</div>	
+					</ul>
+			<div data-role="content" class="muevete">
+				
+				<ul data-role="listview" data-divider-theme="a" data-inset="false" data-icon="arrow-r">
+						
+						<li data-theme="a">
+						   <a  href="#adv" 		
+							data-transition="slideup">
+							<img src="img/album_hiit50_1.jpg"/>
+							<h2>Workout Plan #1 </h2>
+							<p>Trainer: Mallory</p>
+							<p></p>
+							</a>
+							
+						</li>
+				</ul>
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Jumping Jacks</h1>
+										
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#jumpingjacks" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										 </a>
+									
+									</div>
+								</div>
+								
+									<!-- Page 1 Popup -->
+							<div id="popup2" class="funTime" data-role="popup" data-theme="e" >
+							  <div data-role="header" ><a data-role="button" id="btnCancel" style="display:none;" Info - data-icon="delete" data-iconpos="notext"></a>
+								<h2> Let's Do It </h2>
+							  </div>
+							  <div data-role="content">
+								<h1 id="counterMsg" style="text-align:center;">Get Ready ...</h1>
+								<h1 id="counter" style="text-align:center;">10</h1>
+							  </div>
+							  <div data-role="footer">
+								<a data-role="button" id="btnCancel" style="display:none;">Cancel</a>
+								<a data-role="button" id="btnPause" style="display:none;">Pause</a>
+								<a data-role="button" id="btnStart" style="display:none;">Start</a>
+								<a data-role="button" id="btnReset" style="display:none;">Reset</a>
+								<a data-role="button" id="btnClose" style="display:none;">Close</a>
+							  </div>
+							</div>
+
+							       
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+						<div>
+										<div>
+										<label for="jumping_jacks_R1">R1:</label>
+											
+								<input type="number" name="jumping_jacks_R1" id="jumping_jacks_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R2">R2:</label>
+											
+								<input type="number" name="jumping_jacks_R2" id="jumping_jacks_R2" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R3">R3:</label>
+											
+								<input type="number" name="jumping_jacks_R3" id="jumping_jacks_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+											
+										</div>
+						</div>
+
+					
+			
+						<img src="img\tabata\jumpingjacks.jpg" alt="jumping_jacks" class="exercise" />
+					</div> <!---field contain -->
+				<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+							
+	
+			
+			<div class="position1">	
+				<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>SKi</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#ski" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="ski_R1">R1:</label>
+											
+								<input type="number" name="ski_R1" id="ski_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="ski_R2">R2:</label>
+											
+								<input type="number" name="ski_R2" id="ski_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="ski_R3">R3:</label>
+											
+								<input type="number" name="ski_R3" id="ski_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+
+			<div class="position1">				
+				<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Squats</h1>
+								
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#singlesquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+
+				</div> 
+				
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+
+			                   
+					
+			
+			<div class="position1">				
+						<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			                   
+					
+
+    
+								
+							
+							
+								
+								
+					</div><!--beginner collapsible beginner ends here-->	
+					
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate  </h3>
+			<div class="position1">					
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Burpees</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			                   
+					
+						<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Up and Downs</h1>
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#updowns" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="up_and_downs_R1">R1:</label>
+											
+								<input type="number" name="up_and_downs_R1" id="up_and_downs_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="up_and_downs_R2">R2:</label>
+											
+								<input type="number" name="up_and_downs_R2" id="up_and_downs_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="up_and_downs_R3">R3:</label>
+											
+								<input type="number" name="up_and_downs_R3" id="up_and_downs_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+
+				</div> 
+				
+			 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Jogging in Place</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jogging" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+								</div>
+									
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jogging_R1">R1:</label>
+											
+								<input type="number" name="jogging_R1" id="jogging_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="jogging_R2">R2:</label>
+											
+								<input type="number" name="jogging_R2" id="jogging_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="jogging_R3">R3:</label>
+											
+								<input type="number" name="jogging_R3" id="jogging_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\runningonplace.jpg" alt="jogging" class="exercise" />
+
+				</div> 
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			
+				
+				<div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>					
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			                  
+
+
+							
+								
+								
+					</div><!--collapsible Intermediate  ends here-->	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced</h3>
+								
+						<div class="position1">		
+							<div data-role="header" data-fullscreen="true" data-theme="d"> 
+										<h1>Climbers</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>					
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+					
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			                   
+			
+						<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jump Step</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jumpstep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>			
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jump_step_R1">R1:</label>
+											
+								<input type="number" name="jump_step_R1" id="jump_step_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="jump_step_R2">R2:</label>
+											
+								<input type="number" name="jump_step_R2" id="jump_step_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="jump_step_R3">R3:</label>
+											
+								<input type="number" name="jump_step_R3" id="jump_step_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\jumpstep.jpg" alt="jump_step" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+												<h1>Squats</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#singlesquats" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+							</div>				
+						</div>
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+					
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+						
+				</div> 		
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					   
+					   <div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Burpees</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees"
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+				
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+					<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Ski</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#ski" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 Video Tutorial</a>
+						</div>			
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="ski_R1">R1:</label>
+											
+								<input type="number" name="ski_R1" id="ski_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="ski_R2">R2:</label>
+											
+								<input type="number" name="ski_R2" id="ski_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+
+										<label for="ski_R3">R3:</label>
+											
+								<input type="number" name="ski_R3" id="ski_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+						
+						
+
+				</div> 
+
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			                   
+	
+							
+							
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jumping Lunge</h1>
+								
+							<div class="position1">
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lungejump" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									  </a>
+						</div>			
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jumping_lunge_R1">R1:</label>
+											
+								<input type="number" name="jumping_lunge_R1" id="jumping_lunge_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+					
+
+										<label for="jumping_lunge_R2">R2:</label>
+											
+								<input type="number" name="jumping_lunge_R2" id="jumping_lunge_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="jumping_lunge_R3">R3:</label>
+											
+								<input type="number" name="jumping_lunge_R3" id="jumping_lunge_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\lungejump.jpg" alt="jumping_lunge" class="exercise" />
+						
+						
+
+				</div> 
+				
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+
+
+			                   
+					
+			
+							
+								
+								
+								 
+								
+								
+					</div><!--collapsible Advanced  ends here-->	
+
+
+				</div><!--rutinas end-->
+						<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv2" 		
+									data-transition="slideup">
+									<img src="img/album_hiit50_2.jpg"/>
+									<h2>Workout Plan #2</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+								
+						<div class="position1">			
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+									
+										<h1>Jogging in Place</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jogging" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+								</div>
+									
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jogging_R1">R1:</label>
+											
+								<input type="number" name="jogging_R1" id="jogging_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="jogging_R2">R2:</label>
+											
+								<input type="number" name="jogging_R2" id="jogging_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="jogging_R3">R3:</label>
+											
+								<input type="number" name="jogging_R3" id="jogging_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\runningonplace.jpg" alt="jogging" class="exercise" />
+
+				</div> 
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 
+					 
+					 
+									
+								<div class="position1">
+										<div data-role="header" data-fullscreen="true" data-theme="b">
+													<h1>Squat Jumps</h1>	
+													
+												
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#squatjumps" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+										</div>	
+							</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									
+
+									<label for="squat_jumps_R1">R1:</label>
+												
+									<input type="number" name="squat_jumps_R1" id="squat_jumps_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								
+
+											<label for="squat_jumps_R2">R2:</label>
+												
+									<input type="number" name="squat_jumps_R2" id="squat_jumps_R2" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+								
+
+											<label for="squat_jumps_R3">R3:</label>
+												
+									<input type="number" name="squat_jumps_R3" id="squat_jumps_R3" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\tabata\squatjump.jpg" alt="squat_jumps" class="exercise" />
+
+					</div> 
+					
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+					
+					<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>SKi</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#ski" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="ski_R1">R1:</label>
+											
+								<input type="number" name="ski_R1" id="ski_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="ski_R2">R2:</label>
+											
+								<input type="number" name="ski_R2" id="ski_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="ski_R3">R3:</label>
+											
+								<input type="number" name="ski_R3" id="ski_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				 <div class="position1"> 
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Lunge Back Knee Up</h1>
+								
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lbackkneeup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="Lunge_back_knee_up_R1">R1:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R1" id="Lunge_back_knee_up_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="Lunge_back_knee_up_R2">R2:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R2" id="Lunge_back_knee_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="Lunge_back_knee_up_R3">R3:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R3" id="Lunge_back_knee_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\Lunge_back_knee_up.jpg" alt="Lunge_back_knee_up" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+	
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+								<div class="position1">
+															<div data-role="header" data-fullscreen="true" data-theme="a">
+																<h1>1, 2 ,3, Up</h1>
+														
+													
+														
+															<a data-role="button" 
+															data-inline="false" 
+															data-transition="flip"
+															data-theme="a"
+															href="#123up" 
+															data-rel="dialog" 
+															Info - data-icon="info"
+															data-iconpos="notext"
+															class="ui-btn-right">
+															</a>
+											</div>				
+										</div>
+															 <!--button end-->
+										
+										
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+												
+
+														<label for="123up_R1">R1:</label>
+																	
+														<input type="number" name="123up_R1" id="123up_R1" value="0" maxlength="3"  data-theme="a"/>
+												
+											
+
+																<label for="123up_R2">R2:</label>
+																	
+														<input type="number" name="123up_R2" id="123up_R2" value="0" maxlength="3"  data-theme="a"/>
+											
+																<label for="123up_R3">R3:</label>
+																	
+														<input type="number" name="123up_R3" id="123up_R3" value="0" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+									
+												<img src="img\tabata\123up.jpg" alt="123up" class="exercise" />
+
+										</div> 
+										  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1">
+					 	<div data-role="header" data-fullscreen="true"  data-theme="a">
+										<h1>Burpees</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees"
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>				
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+				
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Jumping Jacks</h1>
+										
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#jumpingjacks" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										 </a>
+									
+									</div>
+								</div>
+								
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+						<div>
+										<div>
+										<label for="jumping_jacks_R1">R1:</label>
+											
+								<input type="number" name="jumping_jacks_R1" id="jumping_jacks_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R2">R2:</label>
+											
+								<input type="number" name="jumping_jacks_R2" id="jumping_jacks_R2" value="0" maxlength="3"  data-theme="a"/>
+								
+								<label for="jumping_jacks_R3">R3:</label>
+											
+								<input type="number" name="jumping_jacks_R3" id="jumping_jacks_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+											
+										</div>
+						</div>
+
+					
+			
+						<img src="img\tabata\jumpingjacks.jpg" alt="jumping_jacks" class="exercise" />
+					</div> <!---field contain -->
+				<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>SKi</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#ski" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="ski_R1">R1:</label>
+											
+								<input type="number" name="ski_R1" id="ski_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="ski_R2">R2:</label>
+											
+								<input type="number" name="ski_R2" id="ski_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="ski_R3">R3:</label>
+											
+								<input type="number" name="ski_R3" id="ski_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+
+				</div> 
+				
+			
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+					</div>	
+					
+					
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+								
+							 <div class="position1">
+								<div data-role="header" data-fullscreen="true"  data-theme="d">
+										<h1>Jump Rope</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#rope" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+								</div>				
+							</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				
+			<div class="position1">			
+				  <div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Burpees</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 
+					 <div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Up and Downs</h1>
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#updowns" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="up_and_downs_R1">R1:</label>
+											
+								<input type="number" name="up_and_downs_R1" id="up_and_downs_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="up_and_downs_R2">R2:</label>
+											
+								<input type="number" name="up_and_downs_R2" id="up_and_downs_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="up_and_downs_R3">R3:</label>
+											
+								<input type="number" name="up_and_downs_R3" id="up_and_downs_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+
+				</div> 
+				
+			 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			 
+			 <div class="position1">			
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Power Squats</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#powersquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="power_squats_R1">R1:</label>
+											
+								<input type="number" name="power_squats_R1" id="power_squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="power_squats_R2">R2:</label>
+											
+								<input type="number" name="power_squats_R2" id="power_squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="power_squats_R3">R3:</label>
+											
+								<input type="number" name="power_squats_R3" id="power_squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\powersquat.jpg" alt="power_squats" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				<div class="position1">		
+					<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+					</div>		
+					
+				</div><!--Rutinas 2 Ends here--> 
+				
+				<!--Workout 3 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv3" 		
+									data-transition="slideup">
+									<img src="img/album_hiit50_3.jpg"/>
+									<h2>Workout Plan #3</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+					<div class="position1">			
+						<div data-role="header" data-fullscreen="true"  data-theme="b">
+										<h1>Jump Rope</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#rope" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>				
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				
+				
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 <div class="position1"> 
+					<div data-role="header" data-fullscreen="true"   data-theme="b">
+										<h1>Super Skaters</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#skaters" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="skaters_R1">R1:</label>
+											
+								<input type="number" name="skaters_R1" id="skaters_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="skaters_R2">R2:</label>
+											
+								<input type="number" name="skaters_R2" id="skaters_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="skaters_R3">R3:</label>
+											
+								<input type="number" name="skaters_R3" id="skaters_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\superskaters.jpg" alt="skaters" class="exercise" />
+
+				</div> 
+								<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+								
+					<div class="position1">			
+							<div data-role="header" data-fullscreen="true"  data-theme="b">
+										<h1>Power Squats</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#powersquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="power_squats_R1">R1:</label>
+											
+								<input type="number" name="power_squats_R1" id="power_squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="power_squats_R2">R2:</label>
+											
+								<input type="number" name="power_squats_R2" id="power_squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="power_squats_R3">R3:</label>
+											
+								<input type="number" name="power_squats_R3" id="power_squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\powersquat.jpg" alt="power_squats" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">
+					<div data-role="header" data-fullscreen="true"  data-theme="b">
+										<h1>1, 2 ,3, Up</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#123up" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="123up_R1">R1:</label>
+											
+								<input type="number" name="123up_R1" id="123up_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="123up_R2">R2:</label>
+											
+								<input type="number" name="123up_R2" id="123up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="123up_R3">R3:</label>
+											
+								<input type="number" name="123up_R3" id="123up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\123up.jpg" alt="123up" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+							<div class="position1">	
+								<div data-role="header" data-fullscreen="true"  data-theme="a">
+										<h1>Jogging in Place</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jogging" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+								</a>
+								</div>
+									
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jogging_R1">R1:</label>
+											
+								<input type="number" name="jogging_R1" id="jogging_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="jogging_R2">R2:</label>
+											
+								<input type="number" name="jogging_R2" id="jogging_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="jogging_R3">R3:</label>
+											
+								<input type="number" name="jogging_R3" id="jogging_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\runningonplace.jpg" alt="jogging" class="exercise" />
+
+				</div> 
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+				 <div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Jump Rope</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#rope" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+				  			<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Frog Thrusts</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frogthrusts" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="frog_thrusts_R1">R1:</label>
+											
+								<input type="number" name="frog_thrusts_R1" id="frog_thrusts_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="frog_thrusts_R2">R2:</label>
+											
+								<input type="number" name="frog_thrusts_R2" id="frog_thrusts_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="frog_thrusts_R3">R3:</label>
+											
+								<input type="number" name="frog_thrusts_R3" id="frog_thrusts_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+					<div class="position1">		
+				  				<div data-role="header" data-fullscreen="true"  data-theme="a">
+										<h1>Power Squats</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#powersquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="power_squats_R1">R1:</label>
+											
+								<input type="number" name="power_squats_R1" id="power_squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="power_squats_R2">R2:</label>
+											
+								<input type="number" name="power_squats_R2" id="power_squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="power_squats_R3">R3:</label>
+											
+								<input type="number" name="power_squats_R3" id="power_squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\powersquat.jpg" alt="power_squats" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+								
+					<div class="position1">
+												<div data-role="header" data-fullscreen="true"  data-theme="d">
+										<h1>Step Ups</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#stepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="step_ups_R1">R1:</label>
+											
+								<input type="number" name="step_ups_R1" id="step_ups_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="step_ups_R2">R2:</label>
+											
+								<input type="number" name="step_ups_R2" id="step_ups_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="step_ups_R3">R3:</label>
+											
+								<input type="number" name="step_ups_R3" id="step_ups_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="step_ups" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1"> 
+				    <div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>					
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true"  data-theme="d">
+										<h1>Burpees</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+				<div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jump Rope</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#rope" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					<div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jump Step</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jumpstep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>			
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jump_step_R1">R1:</label>
+											
+								<input type="number" name="jump_step_R1" id="jump_step_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="jump_step_R2">R2:</label>
+											
+								<input type="number" name="jump_step_R2" id="jump_step_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="jump_step_R3">R3:</label>
+											
+								<input type="number" name="jump_step_R3" id="jump_step_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\jumpstep.jpg" alt="jump_step" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+				  
+				  
+								
+					</div>		
+					
+				</div><!--Rutinas 3 Ends here--> 
+				
+				<!--Workout 4 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv4" 		
+									data-transition="slideup">
+									<img src="img/album_hiit50_4.jpg"/>
+									<h2>Workout Plan #4</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+							<div class="position1">	
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Squats</h1>
+								
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#singlesquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+
+				</div> 
+				
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>1, 2 ,3, Up</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#123up" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="123up_R1">R1:</label>
+											
+								<input type="number" name="123up_R1" id="123up_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="123up_R2">R2:</label>
+											
+								<input type="number" name="123up_R2" id="123up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="123up_R3">R3:</label>
+											
+								<input type="number" name="123up_R3" id="123up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\123up.jpg" alt="123up" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				 <div class="position1"> 
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+				</div>					
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+				<div class="position1">
+					 <div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Step Ups</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#stepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="stepup_R1">R1:</label>
+											
+								<input type="number" name="stepup_R1" id="stepup_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="stepup_R2">R2:</label>
+											
+								<input type="number" name="stepup_R2" id="stepup_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="stepup_R3">R3:</label>
+											
+								<input type="number" name="stepup_R3" id="stepup_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="stepup" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 
+							
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+								
+				<div class="position1">				
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Side Step Up</h1>
+										
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sidestep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+						</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+					
+
+								<label for="side_step_up_R1">R1:</label>
+											
+								<input type="number" name="side_step_up_R1" id="side_step_up_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+							
+					
+
+										<label for="side_step_up_R2">R2:</label>
+											
+								<input type="number" name="side_step_up_R2" id="side_step_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+							
+					
+
+										<label for="side_step_up_R3">R3:</label>
+											
+								<input type="number" name="side_step_up_R3" id="side_step_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\sidestepups.jpg" alt="side_step_up" class="exercise" />
+
+				</div>     
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					<div class="position1"> 
+					 				<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Jumping Jacks on Step</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jackonstep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jjacksonstep_R1">R1:</label>
+											
+								<input type="number" name="jjacksonstep_R1" id="jjacksonstep_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="jjacksonstep_R2">R2:</label>
+											
+								<input type="number" name="jjacksonstep_R2" id="jjacksonstep_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="jjacksonstep_R3">R3:</label>
+											
+								<input type="number" name="jjacksonstep_R3" id="jjacksonstep_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\jumpingjackstep.jpg" alt="jjacksonstep" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  	<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Step Ups</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#stepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="stepup_R1">R1:</label>
+											
+								<input type="number" name="stepup_R1" id="stepup_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="stepup_R2">R2:</label>
+											
+								<input type="number" name="stepup_R2" id="stepup_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="stepup_R3">R3:</label>
+											
+								<input type="number" name="stepup_R3" id="stepup_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="stepup" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+			<div class="position1">
+				  				<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+								
+					</div>	<!--intermediate-->
+					
+					
+					
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+								
+				<div class="position1">				
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Stationary Jumping Lunge</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#stationarylungejump" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="stationary_jum_lunge_R1">R1:</label>
+											
+								<input type="number" name="stationary_jum_lunge_R1" id="stationary_jum_lunge_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="stationary_jum_lunge_R2">R2:</label>
+											
+								<input type="number" name="stationary_jum_lunge_R2" id="stationary_jum_lunge_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="stationary_jum_lunge_R3">R3:</label>
+											
+								<input type="number" name="stationary_jum_lunge_R3" id="stationary_jum_lunge_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stationary_jum_lunge.jpg" alt="stationary_jum_lunge" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">
+				    <div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>1, 2 ,3, Up</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#123up" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="123up_R1">R1:</label>
+											
+								<input type="number" name="123up_R1" id="123up_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="123up_R2">R2:</label>
+											
+								<input type="number" name="123up_R2" id="123up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="123up_R3">R3:</label>
+											
+								<input type="number" name="123up_R3" id="123up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\123up.jpg" alt="123up" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  				
+				<div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Squat Jumps</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#squatjumps" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squat_jump_R1">R1:</label>
+											
+								<input type="number" name="squat_jump_R1" id="squat_jump_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="squat_jump_R2">R2:</label>
+											
+								<input type="number" name="squat_jump_R2" id="squat_jump_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="squat_jump_R3">R3:</label>
+											
+								<input type="number" name="squat_jump_R3" id="squat_jump_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\squat_jump.jpg" alt="squat_jump" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+			<div class="position1">  
+				  <div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+				</div>					
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Up and Downs</h1>
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#updowns" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="up_and_downs_R1">R1:</label>
+											
+								<input type="number" name="up_and_downs_R1" id="up_and_downs_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="up_and_downs_R2">R2:</label>
+											
+								<input type="number" name="up_and_downs_R2" id="up_and_downs_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="up_and_downs_R3">R3:</label>
+											
+								<input type="number" name="up_and_downs_R3" id="up_and_downs_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+
+				</div> 
+				
+			 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+								
+					</div>		
+					
+				</div><!--Rutinas 4 Ends here--> 
+				
+				
+				<!--Workout 5 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv5" 		
+									data-transition="slideup">
+									<img src="img/album_hiit50_5.jpg"/>
+									<h2>Workout Plan #5</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+								
+			<div class="position1">					
+							<div data-role="header" data-fullscreen="true"  data-theme="b">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 
+				  			 <div class="position1">
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Squat Jump</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#squatjumps" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squat_jump_R1">R1:</label>
+											
+								<input type="number" name="squat_jump_R1" id="squat_jump_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="squat_jump_R2">R2:</label>
+											
+								<input type="number" name="squat_jump_R2" id="squat_jump_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="squat_jump_R3">R3:</label>
+											
+								<input type="number" name="squat_jump_R3" id="squat_jump_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\squat_jump.jpg" alt="squat_jump" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Up and Downs</h1>
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#updowns" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="up_and_downs_R1">R1:</label>
+											
+								<input type="number" name="up_and_downs_R1" id="up_and_downs_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="up_and_downs_R2">R2:</label>
+											
+								<input type="number" name="up_and_downs_R2" id="up_and_downs_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="up_and_downs_R3">R3:</label>
+											
+								<input type="number" name="up_and_downs_R3" id="up_and_downs_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+
+				</div> 
+				
+			 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+			 
+				<div class="position1">			
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Lunge Back Knee Up</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#lbackkneeup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="Lunge_back_knee_up_R1">R1:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R1" id="Lunge_back_knee_up_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="Lunge_back_knee_up_R2">R2:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R2" id="Lunge_back_knee_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="Lunge_back_knee_up_R3">R3:</label>
+											
+								<input type="number" name="Lunge_back_knee_up_R3" id="Lunge_back_knee_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\Lunge_back_knee_up.jpg" alt="Lunge_back_knee_up" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+						<div class="position1">				
+				<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Squats</h1>
+								
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#singlesquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+
+				</div> 
+				
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 	<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Swiss Ball Hamstring Curls</h1>
+								
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swissballcurls" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+							</div>
+						</div>	         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+
+								<label for="swiss_ball_hamstring_curls_R1">R1:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R1" id="swiss_ball_hamstring_curls_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+
+										<label for="swiss_ball_hamstring_curls_R2">R2:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R2" id="swiss_ball_hamstring_curls_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+							
+
+										<label for="swiss_ball_hamstring_curls_R3">R3:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R3" id="swiss_ball_hamstring_curls_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\hamstrings\legcurlharmstring.jpg" alt="swiss_ball_hamstring_curls" class="exercise" />
+
+				</div>
+							
+									 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+									 
+									 <div class="position1">
+										<div data-role="header" data-fullscreen="true" data-theme="a">
+													<h1>Squat Jumps</h1>	
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#squatjumps" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+											</div>	
+									</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									
+
+									<label for="squat_jumps_R1">R1:</label>
+												
+									<input type="number" name="squat_jumps_R1" id="squat_jumps_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								
+
+											<label for="squat_jumps_R2">R2:</label>
+												
+									<input type="number" name="squat_jumps_R2" id="squat_jumps_R2" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+								
+
+											<label for="squat_jumps_R3">R3:</label>
+												
+									<input type="number" name="squat_jumps_R3" id="squat_jumps_R3" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\tabata\squatjump.jpg" alt="squat_jumps" class="exercise" />
+
+					</div> 
+					
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+					<div class="position1">				
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Side Step Up</h1>
+										
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sidestep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+						</div>
+				</div>			         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+					
+
+								<label for="side_step_up_R1">R1:</label>
+											
+								<input type="number" name="side_step_up_R1" id="side_step_up_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+							
+					
+
+										<label for="side_step_up_R2">R2:</label>
+											
+								<input type="number" name="side_step_up_R2" id="side_step_up_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+							
+					
+
+										<label for="side_step_up_R3">R3:</label>
+											
+								<input type="number" name="side_step_up_R3" id="side_step_up_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\sidestepups.jpg" alt="side_step_up" class="exercise" />
+
+				</div>     
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+									 
+									 		
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+						<div class="position1">
+			<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Goblet Squat</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#gobletsquat" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+		</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="goblet_squat_R1">R1:</label>
+											
+								<input type="number" name="goblet_squat_R1" id="goblet_squat_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="goblet_squat_R2">R2:</label>
+											
+								<input type="number" name="goblet_squat_R2" id="goblet_squat_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="goblet_squat_R3">R3:</label>
+											
+								<input type="number" name="goblet_squat_R3" id="goblet_squat_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\glutes\gobletsquat.jpg" alt="goblet_squat" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Swiss Ball Hamstring Curls</h1>
+								
+				
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swissballcurls" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+									
+							</div>
+						</div>	         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+								
+
+								<label for="swiss_ball_hamstring_curls_R1">R1:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R1" id="swiss_ball_hamstring_curls_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+
+										<label for="swiss_ball_hamstring_curls_R2">R2:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R2" id="swiss_ball_hamstring_curls_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+							
+
+										<label for="swiss_ball_hamstring_curls_R3">R3:</label>
+											
+								<input type="number" name="swiss_ball_hamstring_curls_R3" id="swiss_ball_hamstring_curls_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\hamstrings\legcurlharmstring.jpg" alt="swiss_ball_hamstring_curls" class="exercise" />
+
+				</div>
+							
+									 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+									 
+					<div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jump Rope</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#rope" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				   <div class="position1">
+					<div data-role="header" data-fullscreen="true"data-theme="d">
+										<h1>Burpee to Step</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpeestep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpee_to_step_R1">R1:</label>
+											
+								<input type="number" name="burpee_to_step_R1" id="burpee_to_step_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="burpee_to_step_R2">R2:</label>
+											
+								<input type="number" name="burpee_to_step_R2" id="burpee_to_step_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="burpee_to_step_R3">R3:</label>
+											
+								<input type="number" name="burpee_to_step_R3" id="burpee_to_step_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpee_to_step.jpg" alt="burpee_to_step" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				  <div class="position1">
+					<div data-role="header" data-fullscreen="true"data-theme="d">
+										<h1>One Leg Dead Lift</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#onelegdeadlift" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="one_leg_dead_lift_R1">R1:</label>
+											
+								<input type="number" name="one_leg_dead_lift_R1" id="one_leg_dead_lift_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="one_leg_dead_lift_R2">R2:</label>
+											
+								<input type="number" name="one_leg_dead_lift_R2" id="one_leg_dead_lift_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="one_leg_dead_lift_R3">R3:</label>
+											
+								<input type="number" name="one_leg_dead_lift_R3" id="one_leg_dead_lift_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\hamstrings\deathliftoneleg.jpg" alt="one_leg_dead_lift" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>		
+								
+					</div>		
+					
+				</div><!--Rutinas 5 Ends here-->
+
+					<!--Workout 6 starts here-->
+				<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="a">
+								   <a  href="#adv6" 		
+									data-transition="slideup">
+									<img src="img/album_hiit50_6.jpg"/>
+									<h2>Workout Plan #6</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner </h3>
+							<div class="position1">  
+				  <div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+				</div>					
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1"> 
+					 				<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Jumping Jacks on Step</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jackonstep"
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jjacksonstep_R1">R1:</label>
+											
+								<input type="number" name="jjacksonstep_R1" id="jjacksonstep_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="jjacksonstep_R2">R2:</label>
+											
+								<input type="number" name="jjacksonstep_R2" id="jjacksonstep_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="jjacksonstep_R3">R3:</label>
+											
+								<input type="number" name="jjacksonstep_R3" id="jjacksonstep_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\jumpingjackstep.jpg" alt="jjacksonstep" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">		
+					<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>						
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+					 <div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Step Ups</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#stepup" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="stepup_R1">R1:</label>
+											
+								<input type="number" name="stepup_R1" id="stepup_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="stepup_R2">R2:</label>
+											
+								<input type="number" name="stepup_R2" id="stepup_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="stepup_R3">R3:</label>
+											
+								<input type="number" name="stepup_R3" id="stepup_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\stepup.jpg" alt="stepup" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">		
+				  				<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Power Squats</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#powersquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+								</div>				
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="power_squats_R1">R1:</label>
+											
+								<input type="number" name="power_squats_R1" id="power_squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="power_squats_R2">R2:</label>
+											
+								<input type="number" name="power_squats_R2" id="power_squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="power_squats_R3">R3:</label>
+											
+								<input type="number" name="power_squats_R3" id="power_squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\powersquat.jpg" alt="power_squats" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">			
+				  <div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Burpees</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+					</div>				
+			</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+
+
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+								 <div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Burpees</h1>
+								
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#burpees"
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="burpees_R1">R1:</label>
+											
+								<input type="number" name="burpees_R1" id="burpees_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+
+										<label for="burpees_R2">R2:</label>
+											
+								<input type="number" name="burpees_R2" id="burpees_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="burpees_R3">R3:</label>
+											
+								<input type="number" name="burpees_R3" id="burpees_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+
+				</div> 
+				
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1"> 
+				    <div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Swing</h1>
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#swing" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+					</div>					
+				</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="swing_R1">R1:</label>
+											
+								<input type="number" name="swing_R1" id="swing_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="swing_R2">R2:</label>
+											
+								<input type="number" name="swing_R2" id="swing_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="swing_R3">R3:</label>
+											
+								<input type="number" name="swing_R3" id="swing_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+
+				</div> 
+
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1">
+				  			<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Frog Thrusts</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frogthrusts" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="frog_thrusts_R1">R1:</label>
+											
+								<input type="number" name="frog_thrusts_R1" id="frog_thrusts_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="frog_thrusts_R2">R2:</label>
+											
+								<input type="number" name="frog_thrusts_R2" id="frog_thrusts_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="frog_thrusts_R3">R3:</label>
+											
+								<input type="number" name="frog_thrusts_R3" id="frog_thrusts_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div data-role="fieldcontain" >
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+												<h1>Squats</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#singlesquats" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+							</div>				
+						</div>
+				
+
+					<div>
+							<div>
+						
+
+								<label for="squats_R1">R1:</label>
+											
+								<input type="number" name="squats_R1" id="squats_R1" value="0" maxlength="3"  data-theme="a"/>
+				
+					
+
+										<label for="squats_R2">R2:</label>
+											
+								<input type="number" name="squats_R2" id="squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+			
+					
+
+										<label for="squats_R3">R3:</label>
+											
+								<input type="number" name="squats_R3" id="squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+						
+				</div> 		
+				
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1">		
+							<div data-role="header" data-fullscreen="true" data-theme="a"> 
+										<h1>Climbers</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>					
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+					
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					  <div class="position1">
+								<div data-role="header" data-fullscreen="true"  data-theme="a">
+										<h1>Jump Rope</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#rope" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+								</div>				
+							</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+								
+															<div class="position1">
+								<div data-role="header" data-fullscreen="true"  data-theme="d">
+										<h1>Jump Rope</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#rope" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+								</div>				
+							</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="rope_R1">R1:</label>
+											
+								<input type="number" name="rope_R1" id="rope_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="rope_R2">R2:</label>
+											
+								<input type="number" name="rope_R2" id="rope_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="rope_R3">R3:</label>
+											
+								<input type="number" name="rope_R3" id="rope_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\rope.jpg" alt="rope" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">	
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Jump Step</h1>
+								
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#jumpstep" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+							</div>			
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="jump_step_R1">R1:</label>
+											
+								<input type="number" name="jump_step_R1" id="jump_step_R1" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+
+										<label for="jump_step_R2">R2:</label>
+											
+								<input type="number" name="jump_step_R2" id="jump_step_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="jump_step_R3">R3:</label>
+											
+								<input type="number" name="jump_step_R3" id="jump_step_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\jumpstep.jpg" alt="jump_step" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 
+					 <div class="position1">
+				  			<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Frog Thrusts</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frogthrusts" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="frog_thrusts_R1">R1:</label>
+											
+								<input type="number" name="frog_thrusts_R1" id="frog_thrusts_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="frog_thrusts_R2">R2:</label>
+											
+								<input type="number" name="frog_thrusts_R2" id="frog_thrusts_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="frog_thrusts_R3">R3:</label>
+											
+								<input type="number" name="frog_thrusts_R3" id="frog_thrusts_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				  <div class="position1">
+										<div data-role="header" data-fullscreen="true" data-theme="d">
+													<h1>Squat Jumps</h1>	
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#squatjumps" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+											</div>	
+									</div>
+							         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+
+							<div>
+								<div>
+									
+
+									<label for="squat_jumps_R1">R1:</label>
+												
+									<input type="number" name="squat_jumps_R1" id="squat_jumps_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+								
+
+											<label for="squat_jumps_R2">R2:</label>
+												
+									<input type="number" name="squat_jumps_R2" id="squat_jumps_R2" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+								
+
+											<label for="squat_jumps_R3">R3:</label>
+												
+									<input type="number" name="squat_jumps_R3" id="squat_jumps_R3" value="0" maxlength="3"  data-theme="a"/>
+						
+											
+
+							</div>
+						</div>
+						
+				
+							<img src="img\tabata\squatjump.jpg" alt="squat_jumps" class="exercise" />
+
+					</div> 
+					
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				  
+				
+					 
+					 <div class="position1">		
+							<div data-role="header" data-fullscreen="true" data-theme="d"> 
+										<h1>Climbers</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>					
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+				
+					
+
+										<label for="climbers_R3">R3:</label>
+											
+								<input type="number" name="climbers_R3" id="climbers_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+					
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 <div class="position1">		
+				  				<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Power Squats</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#powersquats" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+								</div>				
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="power_squats_R1">R1:</label>
+											
+								<input type="number" name="power_squats_R1" id="power_squats_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="power_squats_R2">R2:</label>
+											
+								<input type="number" name="power_squats_R2" id="power_squats_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						
+					
+
+										<label for="power_squats_R3">R3:</label>
+											
+								<input type="number" name="power_squats_R3" id="power_squats_R3" value="0" maxlength="3"  data-theme="a"/>
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\powersquat.jpg" alt="power_squats" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+
+					 
+								
+								
+					</div>		
+					
+				</div><!--Rutinas 6 Ends here--> 
+					
+			<div data-role="footer" data-position="fixed"><!--footer-->
+							<div data-role="navbar">
+								<ul>
+									<li>
+										<a href="#page1"data-role="button" data-transition="pop" data-theme="c" data-icon="arrow-l">
+											Instagram
+										</a>
+									</li>
+									<li>
+										<a href="#page1" data-role="button" data-transition="pop" data-theme="c" data-icon="facebook">
+											Facebook
+										</a>
+									</li>
+									<li>
+										<a href="#page1" data-role="button" data-transition="pop" data-theme="c" data-icon="bars">
+											Tweeter
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+			</div><!--content muevete end-->
+			
+								
+	
+
+		
+		</div><!--page-->	
+		
+										
+		
+		<!--Dialog Jumping Jacks-->
+								<div data-role="page"
+									id="jumpingjacks"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jumping Jacks</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\jumpingjacks.jpg" alt="ski" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jumpingjacks.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+		
+		
+<!--Dialog Ski-->
+								<div data-role="page"
+									id="ski"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Ski</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\ski.jpg" alt="ski" class="exercise" />
+									
+										<p>
+										Sidestep to the right as fast as possible, touching the floor with one hand. Alternate to the left
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/ski.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Dialog Single Squat-->
+								<div data-role="page"
+									id="singlesquats"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Squats</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+							<img src="img\tabata\regularsquat.jpg" alt="squats" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/freesquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+		
+<!--Dialog Climbers-->
+								<div data-role="page"
+									id="climbers"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Climbers</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/climbers.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Dialog Burpees-->
+								<div data-role="page"
+									id="burpees"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Burpees</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\burpie.jpg" alt="burpees" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/burpeess.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Up and Downs-->
+								<div data-role="page"
+									id="updowns"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Up and Downs</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     
+									 <img src="img\shoulder\upanddowns.jpg" alt="up_and_downs" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/shoulders/updowns.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+								
+<!--Jogging-->
+									<div data-role="page"
+									id="jogging"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jogging on Place</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     
+									<img src="img\tabata\runningonplace.jpg" alt="jogging" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/runninginplace.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Swing-->
+									<div data-role="page"
+									id="swing"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Swing</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\swing.jpg" alt="swing" class="exercise" />
+									
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/swing.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Jump Step-->
+									<div data-role="page"
+									id="jumpstep"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jump Step</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     
+								<img src="img\tabata\jumpstep.jpg" alt="jump_step" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jumpstep.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Jump lunges-->
+									<div data-role="page"
+									id="lungejump"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jumping Lunge</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     
+									<img src="img\tabata\lungejump.jpg" alt="jumping_lunge" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jumplunge.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Squat Jumps-->
+								
+									<div data-role="page"
+									id="squatjumps"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Squat Jumps</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\squatjump.jpg" alt="squat_jumps" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/squatjumps.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+			
+								
+<!--lunge back knee up-->								
+									<div data-role="page"
+									id="lbackkneeup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Lunge Back Knee Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\Lunge_back_knee_up.jpg" alt="lunge_back_knee_up" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/lungebackkneeup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+			
+<!--1,2,3 up-->			
+									<div data-role="page"
+									id="123up"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>1, 2 ,3, Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\123up.jpg" alt="1,2,3 up" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/onetwoup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--rope-->								
+									<div data-role="page"
+									id="rope"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jump Rope</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\rope.jpg" alt="rope" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/lrope.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+							
+<!--power squats-->							
+							<div data-role="page"
+									id="powersquats"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Power Squats</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\powersquat.jpg" alt="power_squat" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/powersquats.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--super skaters-->
+								
+								<div data-role="page"
+									id="skaters"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Super Skaters</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\superskaters.jpg" alt="super_skaters" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/superskaters.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--frogthrusts-->
+								<div data-role="page"
+									id="frogthrusts"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Frog Thrusts</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/frogthrusts.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--jumping jacks on step-->
+							<div data-role="page"
+									id="jackonstep"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Jumping Jacks on Step</h1>
+									</div>
+									<div data-role="content" 
+									>
+								   <img src="img\tabata\jumpingjackstep.jpg" alt="ski" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/jackonstep.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+								
+<!--step up-->								
+								<div data-role="page"
+									id="stepup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Step Ups</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\tabata\stepup.jpg" alt="step_up" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/stepup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--swissballcurls-->
+								<div data-role="page"
+									id="swissballcurls"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Swiss Ball Hamstring Curls</h1>
+									</div>
+									<div data-role="content" 
+									>
+								     <img src="img\hamstrings\legcurlharmstring.jpg" alt="step_up" class="exercise" />  	
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/legcurlharmstring.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Side Step Up-->
+								<div data-role="page"
+									id="sidestep"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Side Step Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\sidestepups.jpg" alt="side_step_up" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/sidestep.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+
+
+<!--stationary lunge jump-->								
+								<div data-role="page"
+									id="stationarylungejump"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Stationary Jumping Lunge</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tabata\stationary_jum_lunge.jpg" alt="jumping_lunge" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/stationarylungejump.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--goblet squat -->
+								<div data-role="page"
+									id="gobletsquat"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Goblet Squat</h1>
+									</div>
+									<div data-role="content" 
+									>			
+									<img src="img\glutes\gobletsquat.jpg" alt="goblet_squat" class="exercise" />
+
+									
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+									<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/glutes/gobletsquat.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!-- Burpee Step -->
+								<div data-role="page"
+									id="burpeestep"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Burpee to Step</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\tabata\burpeetostep.jpg" alt="burpee_to_step" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--One Leg Dead lift  -->
+								<div data-role="page"
+									id="onelegdeadlift"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>One Leg Dead Lift</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\hamstrings\deathliftoneleg.jpg" alt="one_leg_dead_lift" class="exercise" />
+									
+										<p>
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/hamstrings/onelegdeadlift.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+								
+			
+			
+			
+			
+			
+			
+			<!--Video page 1-->
+			
+			<div data-role="page" id="adv" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+								
+				<div data-role="page" id="adv2" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>				
+				
+				
+				<div data-role="page" id="adv3" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+				
+				<div data-role="page" id="adv4" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+				
+				<div data-role="page" id="adv5" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+				
+				<div data-role="page" id="adv6" data-add-back-btn="true" >
+									<div data-role="header" data-position="fixed" data-theme="d" >
+										<h3>
+											HIIT 50 Secs.
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>HIIT 50 Secs Videos </h2>
+											
+											</li>
+											<li data-theme="c" data-icon="video" >
+											   <a  onclick="playVideo('file:///extsdcard/intervals.mp4')">
+												
+												
+												<img src="img/intervalbeginnerplay1.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateintervals.mp4')">
+											<img src="img/intervalbeginnerplay2.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="video" >
+											 <a  onclick="playVideo('file:///extsdcard/intervalsadvanced.mp4')">
+											<img src="img/intervalbeginnerplay3.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+				</div>
+						<!--Video Page ends here-->		
+			
+		
+										
+
+
+											
+
+								
+								
+	</body>
+</html>									

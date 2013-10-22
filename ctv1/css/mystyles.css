@@ -1,0 +1,239 @@
+#californitraining {
+
+margin: 0px 2%;
+}
+
+.muevete {
+margin:0px 0%;
+
+}
+
+
+
+
+
+#intvContent {
+	background-size: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	text-align: center;
+	
+}
+#intvClock {
+	font-size: 600%;
+	
+		
+}
+
+
+
+
+.ui-icon-video {
+background-image: url("images/icon_videos.png");
+
+}
+
+.ui-icon-cali {
+background-image: url("images/icon_cali.png");
+
+}
+
+.ui-icon-facebook {
+background-image: url("images/icon_facebook.png");
+
+}
+/*  botones del timer*/
+
+.pause {
+height:40px;
+
+}
+
+#btnStart { margin: 4px 12px 0px 2px;
+}
+
+#btnPause{
+margin: 4px 12px 0px 2px;
+}
+
+.circuit  {
+border: 2px solid rgb(98, 161, 206);
+margin: 10px;
+padding: 10px;
+margin: 10px 0px 30px;
+border-radius: 20px;
+
+
+
+}
+
+.ui-btn-right {
+
+align:right;
+
+}
+
+#popup2-popup {
+  width:  70%;
+
+
+  right:  10%;
+  left:   10%;
+}
+
+.ui-header .ui-btn-left, .ui-header .ui-btn-right, .ui-footer .ui-btn-left, .ui-footer .ui-btn-right, .ui-header-fixed.ui-fixed-hidden .ui-btn-left, .ui-header-fixed.ui-fixed-hidden .ui-btn-right {
+    position: absolute;
+    top: 7px;
+}
+	
+	
+h4 {
+    text-shadow: 0px 0px 0px rgb(250, 250, 250);
+    font-size: 13px;
+    text-align: center;
+}
+
+
+
+
+.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-arrow {
+    padding: 0px 10px 22px 85px;
+    height: 40px;
+}
+
+.ui-li-has-alt .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-alt {
+    padding-right: 53px;
+    height: 40px;
+	}
+	
+.rutinas {
+margin:15px 0px;
+}	
+
+
+/*Esta parte donde se ponen los datos de repeticiones y peso, para el primer ejercicio*/
+
+
+
+element {
+    padding-top: 52px;
+    min-height: inherit;
+}
+
+h2 {
+text-shadow: 0px 0px 0px rgb(250, 250, 250);
+}
+
+
+.exercise { 
+  position:relative;
+    border:1px solid #62a1ce ;
+    border-radius:4px;
+	width:90%;
+	margin:15px  6%  -15px;
+}
+
+.ui-mobile a img, .ui-mobile fieldset {
+    border-width: 1px;
+}
+
+.ui-header .ui-title, .ui-footer .ui-title {
+    min-height: 1.1em;
+    text-align: center;
+    font-size: 16px;
+    display: block;
+    margin: 0.6em 0% 0.8em;
+    padding: 0px;
+    text-overflow: ellipsis;
+    overflow: visible;
+    white-space: nowrap;
+    outline: 0px none !important;
+}
+
+.ui-li-heading {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin: 0.6em 0px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+	}
+
+	.ui-li-desc {
+    font-size: 12px;
+    font-weight: normal;
+    display: block;
+    margin: -0.5em 0px 0.6em;
+    text-overflow: ellipsis;
+    overflow: visible;
+    white-space: normal;
+}
+
+.fotoicon {
+    position: absolute;
+    border: 1px solid rgb(98, 161, 206);
+    border-radius: 4px 4px 4px 4px;
+    width: 90%;
+    margin: 0px 0px 0px 0px;
+	}
+	
+	.position1 {
+	margin:10px 0px 0px 0px;
+	
+	}
+/*informacion W1 text area*/
+.ui-field-contain div.ui-input-text {
+    width: 15%;
+	height:30px;
+    display: inline-block;
+    margin: 0px 3px -4px 0px;
+
+}
+
+
+
+.ui-body-c, .ui-overlay-c {
+    border: 1px solid rgb(170, 170, 170);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    background: linear-gradient(rgb(249, 249, 249), rgb(238, 238, 238)) repeat scroll 0% 0% rgb(245, 245, 185);
+    color: rgb(51, 11, 101);
+}
+
+
+/*infromacion R1 y R2 Text area */
+.ui-field-contain input.ui-input-text {
+    width: 40px;
+    display: inline-block;
+
+	}
+	
+.ui-body-a, .ui-overlay-a {
+    border: 1px solid rgb(170, 170, 170);
+    color: rgb(51, 51, 51);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    background: linear-gradient(rgb(249, 249, 249), rgb(238, 238, 238)) repeat scroll 0% 0% rgb(225, 245, 245);
+}
+
+
+.ui-field-contain label.ui-input-text {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0px 10px 0px 0px;
+    width: 10px;
+	max-width: 110%;
+			
+}
+/* El espacio entre bloques de W1 R1 y W2 R2 ais como tamanos*/
+.ui-field-contain div.ui-input-text {
+    width: 15%;
+    height: 30px;
+    display: inline-block;
+    margin: 10px 0px 0px 7px;
+}
+
+.ui-br {
+    border-color: rgba(130, 130, 130, 0);
+    border-style: solid;
+}
+

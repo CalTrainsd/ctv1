@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Workout Timer</title>
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+
+
+
+<script>
+//
+//	intv - singelton
+//
+//	see code and HTML for documentation
+
+var intv = {
+	index: 0,
+	resetIndex:0,
+	events: [],
+	defaultEvent: { 
+		btnCancel:false, btnReset:false, btnStop:false, btnStart:false, btnClose:false, 
+		msg:"...", msgColor:"black", html:{id:"intvClock",text:".."}, clockColor:"black", clockSize:"6.0em"
+		}, 
+
+	// ticker
+	timer:0,		// the js timer id
+	ticks:0,		// the ticks in seconds
+	paused:0, 		// true if paused - events and are stopped
+	eventTicker:0, 	// next event down ticker (sec)
+	clockTicker:0,	// clock display down ticker (sec)
+	
+	tick: function() {
+/*
+console.log("ticks:"+intv.ticks);
+console.log("ticks:"+intv.ticks+
+			",paused"+intv.paused+
+			",index:"+intv.index 
+			);
+*/
+	intv.ticks++ ;
+		if( !intv.paused ) {
+			// do events
+			if( intv.eventTicker ) {
+				intv.eventTicker--;
+				if( !intv.eventTicker )
+					intv.next() ;
+				}
+			// display clock or not
+			if( intv.clockTicker ) {
+				$("#intvClock").html( intv.clockTicker-- ) ;
+				}
+			}
+		},
+	pause: function() {
+		intv.paused = 1 ;
+		},
+	resume: function() {
+		intv.paused = 0 ;
+		},
+	reset: function() {
+		intv.paused = 0 ;
+		intv.index-- ;
+		intv.next() ;
+		},
+	init: function() {
+		// set state
+		intv.uiPause = 0 ;
+		intv.uiResetIndex = -1 ;
+		intv.eventTicker = intv.clockTicker = 0 ;
+		intv.event( intv.defaultEvent ) ;
+		intv.index = -1 ;
+		intv.next() ;
+		intv.paused = 0 ;
+		intv.ticks = 0 ;
+		intv.timer = setInterval( intv.tick, 1000 ) ;
+		},
+	halt: function() {
+		clearInterval( intv.timer ) ;
+		},
+		
+		
+	// do the next event in array
+	next: function() {
+		do {
+			intv.event( intv.events[intv.index]) ; 
+		} while( ++intv.index < intv.events.length && intv.eventTicker == 0 ) ; // till end of array but not while interval time is ticking
+					
+	},
+	// do an event object
+	event: function( i ) {
+		for( key in i ) {
+			switch( key ) {
+			//interval length
+				case "time":
+					intv.eventTicker = i.time ;						// time for this interval before next is executed or 0
+					break ;
+			//display
+				case "clock":										// clock put this time on the clock 
+					intv.clockTicker = i.clock ;
+					break ;
+				case "clockSize":									// clock size up to 6.0em
+					$("#intvClock").css( "font-size", i.clockSize );
+					break ;
+				case "clockColor":									// clock color
+					$("#intvClock").css( "color", i.clockColor );
+					break ;
+				case "msg":											// msg text message
+					$("#intvMsg").html( i.msg );
+					break
+				case "msgSize":										// msg size 
+					$("#intvMsg").css( "font-size", i.msgSize );
+					break ;
+				case "msgColor":									// msg color
+					$("#intvMsg").css( "color", i.msgColor );
+					break
+				case "header":										// header text 
+					$("#intvHeader").html( i.header ) ;
+					break ;
+				case "headerColor":									// header color
+					$("#intvHeader").css( "color", i.headerColor );
+					break
+					
+			// media
+				case "mp3":											// play mp3 file ie "bell" not "bell.mp3"
+					intv.mp3Play( i.mp3 ) ;
+					break ;
+				case "mp3loop":										// play and loop an mp3 file
+					intv.mp3Loop( i.mp3loop ) ;
+					break ;
+				case "vid":											// play a video file single video on background
+					if( i.vid == "" )								// or blank to hide video
+						intv.vidRemove() ;
+					else
+						intv.vidPlay( i.vid ) ;
+					break ;
+			// css + html
+				case "css":
+					$("#"+i.css.id).css( i.css.attr, i.css.val) ;	// set any css give { id, attr, value }
+					break ;
+				case "show":										// show and element by id
+					$("#"+i.show).show() ;
+					break ;
+				case "hide":										// show and element by id
+					$("#"+i.hide).hide() ;
+					break ;
+				case "html":										// put text on screen
+					$("#"+i.html.id).html( i.html.text ) ;
+					break ;
+			// flow control
+				case "close":										// close the popup
+					intv.btnClose() ;
+					break ;
+				case "reset":										// event to jump to when user hits reset button
+					intv.uiResetIndex = intv.index ;
+					break;
+			// run some javascript
+				case "eval":										// run any javascript now
+					eval( i.eval ) ;
+					break ;
+			// buttons - select to show or hide a button. if they show a user can click them
+				case "btnCancel":
+					i.btnCancel ? $( "#intvCancel" ).show() : $( "#intvCancel" ).hide() ;
+					break ;
+				case "btnReset":
+					if( i.btnReset ) {
+						$( "#intvReset" ).show() ;
+						intv.uiResetIndex = intv.index ;
+					} else {
+						$( "#intvReset" ).hide() ;
+						intv.uiResetIndex = -1;
+					}
+					break ;
+				case "btnStop":
+					i.btnStop ? $( "#intvStop" ).show() : $( "#intvStop" ).hide() ;
+					break ;
+				case "btnStart":
+					i.btnStart ? $( "#intvStart" ).show() : $( "#intvStart" ).hide() ;
+					break ;
+				case "btnClose":
+					i.btnClose ? $( "#intvClose" ).show() : $( "#intvClose" ).hide() ;
+					break ;
+			}
+		}
+	},
+
+		
+// media //////////////////
+
+	mp3Loop: function( mp3 ) {
+		$( "<audio id='"+mp3+"' src='mp3/"+mp3+".mp3' loop type='audio/mpeg' />" ).insertAfter("#intvMp3Loop") ;
+		document.getElementById( mp3 ).load() ;	
+		document.getElementById( mp3 ).play() ;	
+		},
+	mp3Load: function( mp3 ) {
+		if(	document.getElementById( mp3 ) == null ) 
+			$( "<audio id='"+mp3+"' src='mp3/"+mp3+".mp3' type='audio/mpeg' />" ).insertAfter("#intvMp3") ;
+		document.getElementById( mp3 ).load() ;	
+		},
+	mp3Play: function( mp3 ) {
+		intv.mp3Load( mp3 ) ;
+		document.getElementById( mp3 ).play() ;	
+		},
+	mp3Pause: function() {
+		$( "#intvMp3Container > audio").each( function(index){
+			this.pause();
+			}) ;
+		},
+	mp3Resume: function() {
+		$( "#intvMp3Container > audio").each( function(index){
+			if( !this.ended )
+				this.play();
+			}) ;
+		},
+	mp3Remove: function() {
+		$( "#intvMp3Container > audio").each( function(index){
+			this.remove();
+			}) ;
+		$( "#intvMp3LoopContainer > audio").each( function(index){
+			this.remove();
+			}) ;
+		},
+	
+	vidLoad: function( mp4 ) {
+		$("#intvVid").attr("src", "video/"+mp4+".mp4") ;
+		document.getElementById( "intvVid" ).load() ;	
+		},
+	vidPlay: function( mp4 ) {
+		intv.vidLoad( mp4 ) ;
+		document.getElementById( "intvVid" ).play() ;	
+		$( "#"+mp4 ).show() ;	
+		},
+	vidPause: function() {
+		document.getElementById( "intvVid" ).pause() ;	
+		},
+	vidResume: function() {
+		document.getElementById( "intvVid" ).play() ;	
+		},
+	vidRemove: function() {
+		document.getElementById( "intvVid" ).pause() ;	
+		$("#intvVid").attr("src", "") ;
+		},
+	
+// UI /////////////////////	
+	uiPause:0, 			// true if user has it paused
+	uiResetIndex:-1,	// when user clicks reset, jump to this event in events[]
+	btnCancel: function() {
+		$( "#intvPopup").popup("close") ;
+		},
+	btnStop: function() {
+		intv.pause() ;
+		intv.mp3Pause() ;
+		intv.vidPause() ;
+		intv.uiPause = 1;
+		},
+	btnStart: function() {
+		if( intv.uiPause ) {
+			intv.resume() ;
+			intv.mp3Resume() ;
+			intv.vidResume() ;
+			intv.uiPause = 0 ;
+			}
+		},
+	btnReset: function() {
+		if( intv.uiPause ) {
+			intv.mp3Resume() ;
+			intv.vidResume() ;
+			intv.uiPause = 0 ;
+			}
+		intv.paused = 0 ;
+		if( intv.uiResetIndex != -1 )
+			intv.index = intv.uiResetIndex ;	// tagged reset position in events[]
+		else
+			intv.index-- ;						// or just go back to last event
+		intv.next() ;
+		},
+	btnClose: function() {
+		$( "#intvPopup").popup("close") ;
+		},
+
+// pop init and close //////////////////
+	popupafteropen: function() {
+		// hookup btn
+		$("#intvCancel").click( intv.btnCancel ) ;
+		$("#intvStop").click( intv.btnStop ) ;
+		$("#intvStart").click( intv.btnStart ) ;
+		$("#intvReset").click( intv.btnReset ) ;
+		$("#intvClose").click( intv.btnClose ) ;
+		// default event then start events
+		intv.init() ;
+		},
+	// stop timer, mp3, vid
+	popupafterclose: function() {
+		intv.halt() ;
+		intv.mp3Remove() ;
+		intv.vidRemove() ;
+
+        $( "#intvVid" ).attr( "width", 0 ).attr( "height", 0 );    
+		}
+};
+
+// scale windows for jquery mobile  //////////////////////////////
+
+function scale( width, height, padding, border ) {
+    var scrWidth = $( window ).width() - 30 -30,
+        scrHeight = $( window ).height() - 30 -30 ,
+        ifrPadding = 2 * padding,
+        ifrBorder = 2 * border,
+        ifrWidth = width + ifrPadding + ifrBorder,
+        ifrHeight = height + ifrPadding + ifrBorder,
+        h, w;
+
+    if ( ifrWidth < scrWidth && ifrHeight < scrHeight ) {
+        w = ifrWidth;
+        h = ifrHeight;
+    } else if ( ( ifrWidth / scrWidth ) > ( ifrHeight / scrHeight ) ) {
+        w = scrWidth;
+        h = ( scrWidth / ifrWidth ) * ifrHeight;
+    } else {
+        h = scrHeight;
+        w = ( scrHeight / ifrHeight ) * ifrWidth;
+    }
+
+    return {
+        'width': w - ( ifrPadding + ifrBorder ),
+        'height': h - ( ifrPadding + ifrBorder )
+    };
+};
+
+// ready ///////////////////////////////////////////
+
+$( document ).on( "pageinit", function() {
+console.log( "page1:pageinit") ; 
+    $( "#intvPopup").on("popupafteropen", intv.popupafteropen );
+    $( "#intvPopup").on("popupafterclose", intv.popupafterclose );
+
+
+    $( "#intvPopup video" ).attr( "width", 0 ).attr( "height", 0 );
+		  
+    $( "#intvPopup" ).on({
+        popupbeforeposition: function() {
+            var size = scale( 497, 298, 15, 1 ),
+                w = size.width,
+                h = size.height;
+
+            $( "#intvPopup video" ).attr( "width", w ).attr( "height", h );
+//			$("#text").attr( "width", w);
+        },
+    });
+});
+
+//
+//	sample event[] ////////////////
+//
+
+// a two step exercise with ready time
+var intvTwoStep = [
+	{ header:"Two Steps", css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" } },
+	// ready
+	{ time:1, clock:5, msg:"Step 1: Get Ready", mp3:"hooray", },
+	{ time:4, mp3loop:"009dreamscape"},	
+	// workout
+	{ time:7, clock:10,  msg: "Workout 1", msgColor:"red", mp3:"bellshort", clockColor:"blue",
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(rgb(243, 226, 100),rgb(243, 52, 35))" },
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"3 Seconds", mp3:"knock"},
+	{ time:1, msg:"Almost ...", mp3:"knock"},
+	{ time:1, msg:"There ...", mp3:"knock"},
+	// break
+	{ time:5, clock:5, msg:"Take a break!", msgColor:"green", clockColor:"black", mp3:"hooray", 
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" },
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false },
+	// ready
+	{ time:5, clock:5, msg:"Step 2: Get Ready" },
+	// workout 2
+	{ time:7, clock:10,  msg: "Workout 2", msgColor:"black", mp3:"bellshort", clockColor:"blue",
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(rgb(243, 226, 100),rgb(243, 52, 35))" },
+			btnClose:false, btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"3 Seconds", mp3:"knock"},
+	{ time:1, msg:"Almost ...", mp3:"knock"},
+	{ time:1, msg:"There ...", mp3:"knock"},
+	// done
+	{ time:5, clock:5, msg:"All Done", msgColor:"green", clockColor:"black", mp3:"hooray", 
+			css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" },
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false },
+	{ close:1}
+] ;
+
+// simple single step exercise
+var intvSimple = [
+	{ header:"Single Step" },
+	{ time:5, clock:5, msg:"Get Ready", mp3:"0047_boxing_bell_ring" },
+	{ mp3loop:"009wasted" },
+	{ time:7, clock:10, msg: "Workout Time", msgColor:"red", clockColor:"blue",
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"All ...", mp3:"knock"},
+	{ time:1, msg:"most...", mp3:"knock"},
+	{ time:1, msg:"DONE !", mp3:"knock"},
+	{ time:5, clock:5, msg:"All Done", msgColor:"green", clockColor:"black", mp3:"0047_boxing_bell_ring", vid:"", 
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false
+	},
+	{ close:1}
+] ;
+
+// simple with video
+var intvVideo = [
+	{ mp3:"miamivice", header:"Video" },
+	{ time:5, clock:5, msg:"Get Ready for Push ups", mp3:"hooray", 
+		btnCancel: true },
+// work
+	{ css:{id:"intvPopup", attr:"background-image", val:"linear-gradient(#DFEBFF,#9864F3)" }},
+	{ time:5, clock:10,  msg: "Push Up Workout", msgColor:"red", clockColor:"blue", vid:"workout",
+		btnCancel:false, btnStart:true, btnStop:true, btnReset: true, btnClose: true },
+	{ time:2, msg:"5 Seconds ...", mp3:"bell"},
+	{ time:1, msg:"hurry ...", mp3:"knock"},
+	{ time:1, msg:"faster ...", mp3:"knock"},
+	{ time:1, msg:"FASTER!!! ...", mp3:"knock"},
+//done
+	{ time:5, clock:5, msg:"done", msgColor:"black", clockColor:"black", mp3:"hooray", vid:""},
+	{ close:true }
+] ;
+
+// a testing one
+var intvTest = [
+	{ mp3:"miamivice" },
+	{ time:2, clock:5, msg:"ready", mp3:"hooray", },
+	{ time:2, clock:10,  msg: "workout", msgColor:"red", clockColor:"blue",
+			btnReset:true, btnStop: true, btnStart: true },
+	{ time:1, msg:"hurry ...", mp3:"knock"},
+	{ time:1, msg:"faster ...", mp3:"knock"},
+	{ time:5, clock:5, msg:"done", msgColor:"black", clockColor:"black", mp3:"hooray", vid:"", 
+			btnClose:true, btnReset:false, btnStop: false, btnStart: false
+	}
+] ;
+
+
+
+
+
+</script>
+
+
+</head>
+<body>
+
+<!-- Page 1 -->
+<div data-role="page" id="page1">
+    <div data-role="header">
+      <h1>Page 1</h1>
+    </div>
+    <div data-role="content">
+       <a data-role="button" href="#intvPopup" data-transition="flow" onclick="intv.events = intvSimple ;" data-rel="popup">Simple PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="fade" onclick="intv.events = intvTwoStep ;" data-rel="popup">Two Step PopUp</a>
+       <a data-role="button" href="#intvPopup" data-transition="flip" onclick="intv.events = intvVideo ;" data-rel="popup">Video PopUp</a>
+       <a data-role="button" href="#intvPopup" onclick="intv.events = intvTest ;" data-rel="popup">Test PopUp</a>
+       <a data-role="button" href="#page1">Button</a>
+        <a data-role="button" href="#page1">Button</a>
+        <a data-role="button" href="#intvPopup" data-rel="popup">PopUp</a>
+
+    </div>
+
+<!-- 
+
+Popup 
+All intv elements are required
+
+ -->
+<div id="intvPopup" data-role="popup" data-overlay-theme="e" data-theme="d" >
+      <div data-role="header">
+        <h2 id="intvHeader" > Let's Do It </h2>
+      </div>
+
+	<div id="intvContent" data-role="content" >
+		<div id="intvTextContainer">
+			<h1 id="intvMsg">Get Ready ...</h1>
+			<h1 id="intvClock">..</h1>
+		</div>
+		<video id="intvVid" width="497" height="298"> </video>
+
+		<div id="intvMp3Container">
+			<div id="intvMp3"></div>
+		</div>
+		<div id="intvMp3LoopContainer">
+			<div id="intvMp3Loop"></div>
+		</div>
+	</div>
+
+
+    <div data-role="footer">
+        <a data-role="button" id="intvCancel" style="display:none;">Cancel</a>
+        <a data-role="button" id="intvStop" style="display:none;">Stop</a>
+        <a data-role="button" id="intvStart" style="display:none;" >Start</a>
+        <a data-role="button" id="intvReset" style="display:none;">Reset</a>
+        <a data-role="button" id="intvClose" style="display:none;">Close</a>
+    </div>
+
+</div>
+
+
+
+<!-- Dialog -->
+<div data-role="page" id="dialog" >
+  <div data-role="header">
+    <h2>Dialog</h2>
+  </div>
+  <div data-role="content">
+    <h1>I am a dialog</h1>
+  </div>
+  <div data-role="footer">
+    <h2>Footer</h2>
+  </div>
+</div>
+
+
+<!-- Page 2 -->
+<div data-role="page" id="page2">
+    <div data-role="header">
+      <h1>Page 2</h1>
+    </div>
+    <div data-role="content">
+        <a data-role="button" href="#intvPopup" data-rel="popup" >PopUp</a>
+        <a data-role="button" href="#dialog" data-rel="dialog" data-transition="pop">Dialog</a>
+        <a data-role="button" href="#page1">Page1</a>
+    </div>
+</div>
+
+
+</body>
+
+<script>
+
+</script>
+
+</html>

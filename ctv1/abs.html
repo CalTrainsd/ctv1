@@ -1,0 +1,4683 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Californitraining</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 " />
+
+		<link rel="stylesheet" href="css/jquery.mobile.css" />
+		<link rel="stylesheet" href="themes/californitraining.min.css" />
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.mobile.js"></script>
+
+		<script src="js/myscript.js"></script>
+		<link rel="stylesheet" href="css/mystyles.css" />
+		
+
+	<script src=”mobile.js” type=”text/javascript”></script>
+
+		
+		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="video.js"></script>
+
+	<script type="text/javascript">
+	function init(){
+	document.addEventListener("deviceready", console.log('ready'), true);
+	}
+	 
+	function playVideo(vidUrl) {
+	window.plugins.videoPlayer.play(vidUrl);
+	}
+	</script> 
+
+	<script>
+
+
+var funTime = {
+// music
+readymp3:   "mp3/0017_mgun_f_02_multiple_shots.mp3",
+workoutmp3: "mp3/0003_voice_female_go_02.mp3", 
+finishmp3:  "mp3/0047_boxing_bell_ring.mp3",
+
+// timers
+prepTime:   5,
+prepMsg:    "Get Ready ...",
+workTime:   50, 
+workMsg:    "Go ...",
+doneMsg:    "Good Job!!!",
+
+
+// Objects and event functions
+popup:      "#popup2",
+counter:    "#counter",
+counterMsg:    "#counterMsg",
+timer:      1,
+pausing:    false,
+
+ 
+// media prop, methods
+media:      null,
+
+select:
+  function( src ) {
+    if (device.platform == 'Android') {
+      src = '/android_asset/www/' + src;
+    }
+    this.eject() ;
+    this.media = new Media( src );
+    this.media.play() ;
+    this.pausing = false ;
+  },
+
+play:
+  function() {
+    if( this.media ) {
+      this.media.play(); 
+    }
+  },
+
+pause: 
+  function() {
+    if( this.media )
+      this.media.pause();
+  },
+ 
+stop: 
+  function() {
+    if( this.media )
+      this.media.stop();
+  },
+ 
+eject: 
+  function() {
+    if( this.media) {
+      this.media.stop();
+      this.media.release() ;
+      this.media = null ;
+    }
+
+  },
+ 
+
+
+decCounter:
+  function() {
+    var cnt = 0 ;
+    cnt = $(funTime.counter).html() ;
+    $(counter).html( --cnt ) ;
+    if( cnt <= 0 )
+      clearInterval( funTime.timer ) ;
+
+    return cnt ;
+  },
+
+
+afterOpen:
+  function( event, ui ) {
+console.log("afteropen");
+    // prepTime setup
+    $("#btnCancel").click( funTime.btnCancel ) ;
+    $("#btnPause").click( funTime.btnPause ) ;
+    $("#btnStart").click( funTime.btnStart ) ;
+    $("#btnReset").click( funTime.btnReset ) ;
+    $("#btnClose").click( funTime.btnClose ) ;
+
+    $(funTime.counter).html( funTime.prepTime ) ;
+    $(funTime.counterMsg).html( funTime.prepMsg ) ;
+    $("#btnCancel").show() ;
+    $("#btnPause").hide() ;
+    $("#btnStart").hide() ;
+    $("#btnReset").hide() ;
+    $("#btnClose").hide() ;
+    funTime.select( funTime.readymp3 );
+    funTime.timer = setInterval( function() {
+       if( funTime.pausing ) return ;
+       if( funTime.decCounter() == 0 ) {
+        /// workTime setup
+        $("#btnCancel").show() ;
+        $("#btnPause").show() ;
+        $("#btnReset").show() ;
+        $("#btnStart").show() ;
+        $(funTime.counter).html( funTime.workTime ) ;
+        $(funTime.counterMsg).html( funTime.workMsg ) ;
+        funTime.select( funTime.workoutmp3 );
+        funTime.timer = setInterval( function() {
+          if( funTime.pausing ) return ;
+          if( funTime.decCounter() == 0 ) {
+            // wait for close
+            $(funTime.counter).html( "" ) ;
+            $(funTime.counterMsg).html( funTime.doneMsg ) ;
+            $("#btnPause").hide() ;
+            $("#btnStart").hide() ;
+            $("#btnReset").hide() ;
+            $("#btnClose").show() ;
+            funTime.select( funTime.finishmp3 );
+          }
+        }, 1000 ) ;
+
+      }
+    }, 1000) ;
+  },
+afterClose:
+  function() {
+console.log("afterclose") ;
+      clearInterval( funTime.timer ) ;
+      funTime.eject() ;
+    },
+
+btnCancel:
+    function() {
+      clearInterval( funTime.timer ) ;
+      $( funTime.popup ).popup( "close" );
+    }, 
+
+btnPause:
+    function() {
+      funTime.pausing = true ;
+      funTime.pause() ;
+
+    }, 
+
+btnStart:
+    function() {
+      funTime.pausing = false ;
+      funTime.play() ;
+
+    }, 
+
+btnReset:
+    function() {
+      $( funTime.counter).html( funTime.workTime ) ;
+    }, 
+
+btnClose:
+    function() {
+      $( funTime.popup ).popup( "close" );
+    } 
+
+
+} ;
+
+
+
+
+$( document ).on( "pageinit", "#page1",  function( event ) {
+console.log( "page1:pageinit") ; 
+    $( "#popup2").on("popupafteropen", funTime.afterOpen );
+    $( "#popup2").on("popupafterclose", funTime.afterClose );
+
+});
+
+</script>
+
+		
+	</head>
+
+	<body>
+<!-- Page: ABS  header-->
+
+		<div id="page1" data-role="page" data-title="Abs"  >
+					<div data-role="header"
+						data-position="fixed"
+							data-id="vs_header"
+							data-theme="b">
+								<h1>Abs</h1>
+					<a href="index.html" rel="external" data-icon="cali"	data-iconpos="left" >Home</a>
+						
+							
+					</div><!-- ABS -->
+					
+					<ul data-role="listview" data-divider-theme="a" >
+					<div data-role="collapsible" data-inset="false" data-theme="a">
+						<h3>Instructions</h3>
+					</div>	
+					</ul>
+					
+			<div data-role="content" class="muevete">
+				<ul data-role="listview" data-divider-theme="h" data-inset="false" data-icon="arrow-r">
+						
+						<li data-theme="b">
+						   <a  href="#adv6" 		
+							data-transition="slideup">
+							<img src="img/album-abs1.jpg"/>
+							<h2>Routine #1	</h2>
+							<p>Trainer: Ana</p>
+							<p>Duration: 5 weeks</p>
+							</a>
+							
+						</li>
+				</ul>
+				<div class="rutinas">
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner .........</h3>
+								
+						<div class="circuit">
+									<h4>Circuit #1</h4>	
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Crunches</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#crunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+											
+										</div>
+									</div>		<!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="crunches_R1">R1:</label>
+													
+										<input type="number" name="crunches_R1" id="crunches_R1" value="20" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="crunches_R2">R2:</label>
+													
+										<input type="number" name="crunches_R2" id="crunches_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunch.jpg" alt="crunches" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Elbow to knee Oblique Crunch</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#kneeobliquecrunch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="elbow_to_knee_oblique_crunch_R1">R1:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R1" id="elbow_to_knee_oblique_crunch_R1" value="20" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="elbow_to_knee_oblique_crunch_R2">R2:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R2" id="elbow_to_knee_oblique_crunch_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\obliquecrunch.jpg" alt="elbow_to_knee_oblique_crunch" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Double Leg Stretch</h1>	
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#doublelegstretch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="double_leg_stretch_R1">R1:</label>
+													
+										<input type="number" name="double_leg_stretch_R1" id="double_leg_stretch_R1" value="12" maxlength="3"  data-theme="a"/>
+							
+
+												<label for="double_leg_stretch_R2">R2:</label>
+													
+										<input type="number" name="double_leg_stretch_R2" id="double_leg_stretch_R2" value="12" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\doublelegstretch.jpg" alt="double_leg_stretch" class="exercise" />
+
+						</div> 
+						
+							
+								
+					</div> <!--circuit #1 ends here-->			
+								
+					</div><!--collapsible beginner ends here-->	
+					
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+							<div class="circuit"><h4>Circuit #1</h4>	
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Medicine Ball Crunch</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#medicinecrunch" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="medicine_ball_crunch_R1">R1:</label>
+													
+										<input type="number" name="medicine_ball_crunch_R1" id="medicine_ball_crunch_R1" value="20" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="medicine_ball_crunch_R2">R2:</label>
+													
+										<input type="number" name="medicine_ball_crunch_R2" id="medicine_ball_crunch_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunchwithball1.jpg" alt="medicine_ball_crunch" class="exercise" />
+
+						</div> 
+						
+							
+										<div class="position1">
+											<div data-role="header" data-fullscreen="true" data-theme="a">
+												<h1>Reverse Crunch</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunch" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_R1" id="reverse_crunch_R1" value="30" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_R2" id="reverse_crunch_R2" value="30" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+
+										</div> 
+										
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Raises</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#legraises" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+								</div>
+							</div>         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="leg_raises_R1">R1:</label>
+													
+										<input type="number" name="leg_raises_R1" id="leg_raises_R1" value="15" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="leg_raises_R2">R2:</label>
+													
+										<input type="number" name="leg_raises_R2" id="leg_raises_R2" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+
+						</div> 
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Bicycle</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#bicycle" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							    </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bicycle_R1">R1:</label>
+													
+										<input type="number" name="bicycle_R1" id="bicycle_R1" value="20" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="bicycle_R2">R2:</label>
+													
+										<input type="number" name="bicycle_R2" id="bicycle_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+
+						</div> 
+								
+						
+						</div><!--circuit #1 ends here -->
+								
+							</div><!--collapsible intermediated ends here-->	
+								
+							<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+								
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Hanging Ab Straps</h1>
+										
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#abstraps" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="hanging_ab_straps_R1">R1:</label>
+													
+										<input type="number" name="hanging_ab_straps_R1" id="hanging_ab_straps_R1" value="20" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="hanging_ab_straps_R2">R2:</label>
+													
+										<input type="number" name="hanging_ab_straps_R2" id="hanging_ab_straps_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+							
+									
+
+												<label for="hanging_ab_straps_R3">R3:</label>
+													
+										<input type="number" name="hanging_ab_straps_R3" id="hanging_ab_straps_R3" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+								<img src="img\abs\abskneetucks.jpg" alt="hanging_ab_straps" class="exercise" />
+
+						</div> 
+								
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Straight Leg Reverse Crunch</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#slreversecrunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="straight_leg_reverse_crunch _R1">R1:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R1" id="straight_leg_reverse_crunch _R1" value="30" maxlength="3"  data-theme="a"/>
+						
+
+												<label for="straight_leg_reverse_crunch _R2">R2:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R2" id="straight_leg_reverse_crunch _R2" value="30" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\legsover.jpg" alt="straight_leg_reverse_crunch " class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+									<h1>Oblique Crunches</h1>
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#obliquecrunches" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="oblique_crunches_R1">R1:</label>
+													
+										<input type="number" name="oblique_crunches_R1" id="oblique_crunches_R1" value="25" maxlength="3"  data-theme="a"/>
+							
+
+												<label for="oblique_crunches_R2">R2:</label>
+													
+										<input type="number" name="oblique_crunches_R2" id="oblique_crunches_R2" value="25" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\sideobliquecrunch.jpg" alt="oblique_crunches" class="exercise" />
+
+						</div> 
+						
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Windshields</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#windshields" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="wind_shields_R1">R1:</label>
+													
+										<input type="number" name="wind_shields_R1" id="wind_shields_R1" value="12" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="wind_shields_R2">R2:</label>
+													
+										<input type="number" name="wind_shields_R2" id="wind_shields_R2" value="12" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\windshield.jpg" alt="wind_shields" class="exercise" />
+
+						</div> 
+									
+								
+					</div><!--collapsible advanced ends here-->	
+
+				</div><!--rutinas end-->				
+			
+					<ul data-role="listview"  data-inset="false" data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="b">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-abs2.jpg"/>
+									<h2>Routine #2</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+								<div data-role="collapsible" data-inset="false" >
+											<h3>Beginner</h3>
+										
+										<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Crunches</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#crunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+											
+										</div>
+								</div>		<!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="crunches_R1">R1:</label>
+													
+										<input type="number" name="crunches_R1" id="crunches_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+												<label for="crunches_R2">R2:</label>
+													
+										<input type="number" name="crunches_R2" id="crunches_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunch.jpg" alt="crunches" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Elbow to knee Oblique Crunch</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#kneeobliquecrunch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="elbow_to_knee_oblique_crunch_R1">R1:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R1" id="elbow_to_knee_oblique_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="elbow_to_knee_oblique_crunch_R2">R2:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R2" id="elbow_to_knee_oblique_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\obliquecrunch.jpg" alt="elbow_to_knee_oblique_crunch" class="exercise" />
+
+						</div> 
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+									
+							
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Russian Twist Feet on Floor</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#russiantwist" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="russian_twist_R1">R1:</label>
+													
+										<input type="number" name="russian_twist_R1" id="russian_twist_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="russian_twist_R2">R2:</label>
+													
+										<input type="number" name="russian_twist_R2" id="russian_twist_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\russiantwist.jpg" alt="russian_twist" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+
+		<!-- Page 1 Popup -->
+							<div id="popup2" class="funTime" data-role="popup" data-theme="e" >
+							  <div data-role="header" ><a data-role="button" id="btnCancel" style="display:none;" Info - data-icon="delete" data-iconpos="notext"></a>
+								<h2> Let's Do It </h2>
+							  </div>
+							  <div data-role="content">
+								<h1 id="counterMsg" style="text-align:center;">Get Ready ...</h1>
+								<h1 id="counter" style="text-align:center;">10</h1>
+							  </div>
+							  <div data-role="footer">
+								<a data-role="button" id="btnCancel" style="display:none;">Cancel</a>
+								<a data-role="button" id="btnPause" style="display:none;">Pause</a>
+								<a data-role="button" id="btnStart" style="display:none;">Start</a>
+								<a data-role="button" id="btnReset" style="display:none;">Reset</a>
+								<a data-role="button" id="btnClose" style="display:none;">Close</a>
+							  </div>
+							</div>		
+
+								
+							
+								</div><!--collabsible beginners ends here-->
+								
+								<div data-role="collapsible" data-inset="false" >
+											<h3>Intermediate </h3>
+											
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true">
+										<h1>Crunches</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#crunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+											
+										</div>
+								</div>		<!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="crunches_R1">R1:</label>
+													
+										<input type="number" name="crunches_R1" id="crunches_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+												<label for="crunches_R2">R2:</label>
+													
+										<input type="number" name="crunches_R2" id="crunches_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunch.jpg" alt="crunches" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+						
+						<div class="position1">
+											<div data-role="header" data-fullscreen="true">
+												<h1>Reverse Crunch</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunch" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_R1" id="reverse_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_R2" id="reverse_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+
+										</div> 
+										<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+										
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true">
+										<h1>Russian Twist</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#russiantwistfeet" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="russian_twist_R1">R1:</label>
+													
+										<input type="number" name="russian_twist_R1" id="russian_twist_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="russian_twist_R2">R2:</label>
+													
+										<input type="number" name="russian_twist_R2" id="russian_twist_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\russiantwistfeet.jpg" alt="russian_twist" class="exercise" />
+
+						</div> 
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+						
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true">
+										<h1>Leg Raises</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#legraises" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+								</div>
+							</div>         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="leg_raises_R1">R1:</label>
+													
+										<input type="number" name="leg_raises_R1" id="leg_raises_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="leg_raises_R2">R2:</label>
+													
+										<input type="number" name="leg_raises_R2" id="leg_raises_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+
+						</div> 
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+						
+			<div class="position1">
+								<div data-role="header" data-fullscreen="true">
+										<h1>Ball Reach Up</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#ballreachup" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="ball_reach_up_R1">R1:</label>
+													
+										<input type="number" name="ball_reach_up_R1" id="ball_reach_up_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="ball_reach_up_R2">R2:</label>
+													
+										<input type="number" name="ball_reach_up_R2" id="ball_reach_up_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\situpswissball.jpg" alt="ball_reach_up" class="exercise" />
+								
+							
+						</div> 
+						
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+											
+								</div>	<!--ends intermediate 2-->
+								
+								<div data-role="collapsible" data-inset="false" >
+											<h3>Advanced </h3>
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+									<h1>Oblique Crunches</h1>
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#obliquecrunches" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="oblique_crunches_R1">R1:</label>
+													
+										<input type="number" name="oblique_crunches_R1" id="oblique_crunches_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="oblique_crunches_R2">R2:</label>
+													
+										<input type="number" name="oblique_crunches_R2" id="oblique_crunches_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\sideobliquecrunch.jpg" alt="oblique_crunches" class="exercise" />
+
+						</div> 
+						 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Single Straight Leg</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#singlestraight" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="single_straight_leg_R1">R1:</label>
+													
+										<input type="number" name="single_straight_leg_R1" id="single_straight_leg_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="single_straight_leg_R2">R2:</label>
+													
+										<input type="number" name="single_straight_leg_R2" id="single_straight_leg_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\singlestraightleg.jpg" alt="single_straight_leg" class="exercise" />
+
+						</div> 
+						 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						 
+						<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Sit Up With Medicine Ball</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#situpmedicine" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="sit_up_medicine_ball_R1">R1:</label>
+													
+										<input type="number" name="sit_up_medicine_ball_R1" id="sit_up_medicine_ball_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="sit_up_medicine_ball_R2">R2:</label>
+													
+										<input type="number" name="sit_up_medicine_ball_R2" id="sit_up_medicine_ball_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\situpball.jpg" alt="sit_up_medicine_ball" class="exercise" />
+
+						</div> 
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 <div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Straight Leg Reverse Crunch</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#slreversecrunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="straight_leg_reverse_crunch _R1">R1:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R1" id="straight_leg_reverse_crunch _R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="straight_leg_reverse_crunch _R2">R2:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R2" id="straight_leg_reverse_crunch _R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\legsover.jpg" alt="straight_leg_reverse_crunch " class="exercise" />
+
+						</div> 
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+				<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+									
+									
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+											
+								</div><!--collapsible advanced ends here-->		
+					
+				</div><!--Rutinas 2 Ends here--> 
+				
+				<!--Workout 3 starts here-->
+				<ul data-role="listview"  data-inset="false" Info - data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="b">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-abs3.jpg"/>
+									<h2>Workout Plan #3</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner</h3>
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Ball Reach Up</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#ballreachup" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="ball_reach_up_R1">R1:</label>
+													
+										<input type="number" name="ball_reach_up_R1" id="ball_reach_up_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="ball_reach_up_R2">R2:</label>
+													
+										<input type="number" name="ball_reach_up_R2" id="ball_reach_up_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\situpswissball.jpg" alt="ball_reach_up" class="exercise" />
+								
+							
+						</div> 
+						
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							<div class="position1">
+											<div data-role="header" data-fullscreen="true" data-theme="b">
+												<h1>Reverse Crunch</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunch" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_R1" id="reverse_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_R2" id="reverse_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+
+										</div> 
+										<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+										
+										
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Bicycle</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#bicycle" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							    </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bicycle_R1">R1:</label>
+													
+										<input type="number" name="bicycle_R1" id="bicycle_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="bicycle_R2">R2:</label>
+													
+										<input type="number" name="bicycle_R2" id="bicycle_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+
+						</div> 
+						
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+
+							
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>		
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate</h3>
+							<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Star Crunch</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#starcrunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="star_crunch_R1">R1:</label>
+													
+										<input type="number" name="star_crunch_R1" id="star_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="star_crunch_R2">R2:</label>
+													
+										<input type="number" name="star_crunch_R2" id="star_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\.jpg" alt="star_crunch" class="exercise" />
+
+						</div> 
+					 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					 
+					 
+					
+					<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Toe Touch Crunches</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#toetouch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="toe_touch_crunches_R1">R1:</label>
+													
+										<input type="number" name="toe_touch_crunches_R1" id="toe_touch_crunches_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="toe_touch_crunches_R2">R2:</label>
+													
+										<input type="number" name="toe_touch_crunches_R2" id="toe_touch_crunches_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\.jpg" alt="toe_touch_crunches" class="exercise" />
+
+						</div> 
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+					
+					<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Raises</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#legraises" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+								</div>
+							</div>         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="leg_raises_R1">R1:</label>
+													
+										<input type="number" name="leg_raises_R1" id="leg_raises_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="leg_raises_R2">R2:</label>
+													
+										<input type="number" name="leg_raises_R2" id="leg_raises_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+
+						</div> 
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Cable Chops with Ball</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#cablechops" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="cable_chops_with_ball _R1">R1:</label>
+													
+										<input type="number" name="cable_chops_with_ball _R1" id="cable_chops_with_ball _R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="cable_chops_with_ball _R2">R2:</label>
+													
+										<input type="number" name="cable_chops_with_ball _R2" id="cable_chops_with_ball _R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\.jpg" alt="cable_chops_with_ball " class="exercise" />
+
+						</div> 
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							
+						
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+												<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Sit Ups on Bench</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#situpsbench" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bench_situp_R1">R1:</label>
+													
+										<input type="number" name="bench_situp_R1" id="bench_situp_R1" value="30" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="bench_situp_R2">R2:</label>
+													
+										<input type="number" name="bench_situp_R2" id="bench_situp_R2" value="30" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\benchsitup.jpg" alt="bench_situp" class="exercise" />
+
+						</div> 
+						
+						
+						<div class="position1">
+											<div data-role="header" data-fullscreen="true" data-theme="d">
+												<h1>Reverse Crunch on Bench</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunchonbench" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_on_bench_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_on_bench_R1" id="reverse_crunch_on_bench_R1" value="20" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_on_bench_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_on_bench_R2" id="reverse_crunch_on_bench_R2" value="20" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunchonbecnh.jpg" alt="reverse_crunch_on_bench" class="exercise" />
+
+										</div> 
+										
+										<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>V Ups</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#vups" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="v_ups_R1">R1:</label>
+													
+										<input type="number" name="v_ups_R1" id="v_ups_R1" value="10" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="v_ups_R2">R2:</label>
+													
+										<input type="number" name="v_ups_R2" id="v_ups_R2" value="10" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\v_ups.jpg" alt="v_ups" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Leg Raises</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#legraises" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+								</div>
+							</div>         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="leg_raises_R1">R1:</label>
+													
+										<input type="number" name="leg_raises_R1" id="leg_raises_R1" value="12" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="leg_raises_R2">R2:</label>
+													
+										<input type="number" name="leg_raises_R2" id="leg_raises_R2" value="12" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+
+						</div> 
+						
+						
+								
+								
+					</div>		
+					
+				</div><!--Rutinas 3 Ends here--> 
+				
+				<!--Workout 4 starts here-->
+				<ul data-role="listview"  data-inset="false" Info - data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="b">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-abs4.jpg"/>
+									<h2>Workout Plan #4</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner</h3>
+								
+															<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b" >
+										<h1>Stability Ball Crunch</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#stabilityballcrunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+											
+										</div>
+								</div>		<!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="crunches_on_ball_R1">R1:</label>
+													
+										<input type="number" name="crunches_on_ball_R1" id="crunches_on_ball_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+												<label for="crunches_on_ball_R2">R2:</label>
+													
+										<input type="number" name="crunches_on_ball_R2" id="crunches_on_ball_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunchwithball.jpg" alt="crunches_on_ball" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Ball Reach Up</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#ballreachup" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="ball_reach_up_R1">R1:</label>
+													
+										<input type="number" name="ball_reach_up_R1" id="ball_reach_up_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="ball_reach_up_R2">R2:</label>
+													
+										<input type="number" name="ball_reach_up_R2" id="ball_reach_up_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\situpswissball.jpg" alt="ball_reach_up" class="exercise" />
+								
+							
+						</div> 
+						
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Russian Twist Feet on Floor</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#russiantwist" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="russian_twist_R1">R1:</label>
+													
+										<input type="number" name="russian_twist_R1" id="russian_twist_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="russian_twist_R2">R2:</label>
+													
+										<input type="number" name="russian_twist_R2" id="russian_twist_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\russiantwist.jpg" alt="russian_twist" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Bicycle</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#bicycle" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							    </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bicycle_R1">R1:</label>
+													
+										<input type="number" name="bicycle_R1" id="bicycle_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="bicycle_R2">R2:</label>
+													
+										<input type="number" name="bicycle_R2" id="bicycle_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+
+						</div> 
+					
+							 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+				  
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+															
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Ball Reach Up</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#ballreachup" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="ball_reach_up_R1">R1:</label>
+													
+										<input type="number" name="ball_reach_up_R1" id="ball_reach_up_R1" value="0" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="ball_reach_up_R2">R2:</label>
+													
+										<input type="number" name="ball_reach_up_R2" id="ball_reach_up_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\situpswissball.jpg" alt="ball_reach_up" class="exercise" />
+								
+							
+						</div> 
+						
+						
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							<div class="position1">
+											<div data-role="header" data-fullscreen="true" data-theme="a">
+												<h1>Reverse Crunch</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunch" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_R1" id="reverse_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_R2" id="reverse_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+
+										</div> 
+										<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+										
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Windshields</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#windshields" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="wind_shields_R1">R1:</label>
+													
+										<input type="number" name="wind_shields_R1" id="wind_shields_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="wind_shields_R2">R2:</label>
+													
+										<input type="number" name="wind_shields_R2" id="wind_shields_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\windshield.jpg" alt="wind_shields" class="exercise" />
+
+						</div> 
+						
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						 <div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Straight Leg Reverse Crunch</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#slreversecrunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="straight_leg_reverse_crunch _R1">R1:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R1" id="straight_leg_reverse_crunch _R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="straight_leg_reverse_crunch _R2">R2:</label>
+													
+										<input type="number" name="straight_leg_reverse_crunch _R2" id="straight_leg_reverse_crunch _R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\legsover.jpg" alt="straight_leg_reverse_crunch " class="exercise" />
+
+						</div> 
+					<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+												<div class="position1">				
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Climbers</h1>
+							
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#climbers" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									 </a>
+						</div>						
+					</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="climbers_R1">R1:</label>
+											
+								<input type="number" name="climbers_R1" id="climbers_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+										<label for="climbers_R2">R2:</label>
+											
+								<input type="number" name="climbers_R2" id="climbers_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+
+				</div> 
+
+
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 	<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Bicycle</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#bicycle" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							    </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bicycle_R1">R1:</label>
+													
+										<input type="number" name="bicycle_R1" id="bicycle_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="bicycle_R2">R2:</label>
+													
+										<input type="number" name="bicycle_R2" id="bicycle_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+
+						</div> 
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+				  			<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Frog Thrusts</h1>
+								
+							
+								
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#frogthrusts" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+							</div>				
+						</div>
+							         <!--button end-->
+				
+				
+				<div data-role="fieldcontain" >
+				
+
+					<div>
+							<div>
+						
+
+								<label for="frog_thrusts_R1">R1:</label>
+											
+								<input type="number" name="frog_thrusts_R1" id="frog_thrusts_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="frog_thrusts_R2">R2:</label>
+											
+								<input type="number" name="frog_thrusts_R2" id="frog_thrusts_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+					
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />
+
+				</div> 
+				  <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+				  
+				  <div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Double Leg Stretch</h1>	
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#doublelegstretch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="double_leg_stretch_R1">R1:</label>
+													
+										<input type="number" name="double_leg_stretch_R1" id="double_leg_stretch_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+
+												<label for="double_leg_stretch_R2">R2:</label>
+													
+										<input type="number" name="double_leg_stretch_R2" id="double_leg_stretch_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\doublelegstretch.jpg" alt="double_leg_stretch" class="exercise" />
+
+						</div> 
+						
+							 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Single Straight Leg</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#singlestraight" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="single_straight_leg_R1">R1:</label>
+													
+										<input type="number" name="single_straight_leg_R1" id="single_straight_leg_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="single_straight_leg_R2">R2:</label>
+													
+										<input type="number" name="single_straight_leg_R2" id="single_straight_leg_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\singlestraightleg.jpg" alt="single_straight_leg" class="exercise" />
+
+						</div> 
+						 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						 
+						 <div class="position1">
+						<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Plank Super Man</h1>
+								
+								
+						
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#planksuperman" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+						</div>			
+					</div>
+							         <!--button end-->
+				
+				
+						<div data-role="fieldcontain" >
+				
+
+							<div>
+								<div>
+						
+
+								<label for="plank_superman_R1">R1:</label>
+											
+								<input type="number" name="plank_superman_R1" id="plank_superman_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+					
+
+										<label for="plank_superman_R2">R2:</label>
+											
+								<input type="number" name="plank_superman_R2" id="plank_superman_R2" value="0" maxlength="3"  data-theme="a"/>
+					
+	
+										
+
+						</div>
+					</div>
+					
+			
+						<img src="img\core\planksuperman.jpg" alt="plank_superman" class="exercise" />
+
+				</div> 
+				
+				 <a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+				 
+				 <div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#plank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+				<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="plank_t1">T1</label>
+													
+										<input type="number" name="plank_t1" id="plank_t1" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="plank_t2">T2</label>
+													
+										<input type="number" name="plank_t2" id="plank_t2" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+									
+				
+							<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+
+						</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+											
+											
+							<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>V Ups</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#vups" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="v_ups_R1">R1:</label>
+													
+										<input type="number" name="v_ups_R1" id="v_ups_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="v_ups_R2">R2:</label>
+													
+										<input type="number" name="v_ups_R2" id="v_ups_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\v_ups.jpg" alt="v_ups" class="exercise" />
+
+						</div> 	
+
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+								
+					</div>		
+					
+				</div><!--Rutinas 4 Ends here--> 
+				
+				
+				<!--Workout 5 starts here-->
+				<ul data-role="listview"  data-inset="false" Info - data-icon="arrow-r">
+			
+							<li data-role="list-divider" role="heading" data-theme="I"  >
+															
+							</li>
+													
+								
+								<li data-theme="b">
+								   <a  href="#adv2" 		
+									data-transition="slide">
+									<img src="img/album-abs5.jpg"/>
+									<h2>Workout Plan #5</h2>
+									<p>Trainer: Mallory</p>
+									
+									</a>
+								</li>
+									
+					</ul>	
+					
+				<div class="rutinas">
+				
+				
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Beginner</h3>
+							
+							<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Crunches</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#crunch" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+											
+										</div>
+								</div>		<!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="crunches_R1">R1:</label>
+													
+										<input type="number" name="crunches_R1" id="crunches_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+
+												<label for="crunches_R2">R2:</label>
+													
+										<input type="number" name="crunches_R2" id="crunches_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\crunch.jpg" alt="crunches" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+							
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Elbow to knee Oblique Crunch</h1>
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#kneeobliquecrunch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="elbow_to_knee_oblique_crunch_R1">R1:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R1" id="elbow_to_knee_oblique_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="elbow_to_knee_oblique_crunch_R2">R2:</label>
+													
+										<input type="number" name="elbow_to_knee_oblique_crunch_R2" id="elbow_to_knee_oblique_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\obliquecrunch.jpg" alt="elbow_to_knee_oblique_crunch" class="exercise" />
+
+						</div> 
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Roll Ups</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#rollups" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="roll_ups_R1">R1:</label>
+													
+										<input type="number" name="roll_ups_R1" id="roll_ups_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="roll_ups_R2">R2:</label>
+													
+										<input type="number" name="roll_ups_R2" id="roll_ups_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\core\rollups.jpg" alt="roll_ups" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+							
+							<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="b">
+										<h1>Corkscrew</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#corkscrew" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="corkscrew_R1">R1:</label>
+													
+										<input type="number" name="corkscrew_R1" id="corkscrew_R1" value="0" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="corkscrew_R2">R2:</label>
+													
+										<input type="number" name="corkscrew_R2" id="corkscrew_R2" value="0" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\core\corckscrew.jpg" alt="corkscrew" class="exercise" />
+
+						</div> 
+							<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>	
+							
+							<div class="position1">
+											<div data-role="header" data-fullscreen="true" data-theme="b">
+												<h1>Reverse Crunch</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#reversecrunch" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+											
+											</div>
+										</div>		 <!-- button end-->
+				
+				
+										<div data-role="fieldcontain" >
+										
+
+											<div>
+													<div>
+														
+
+														<label for="reverse_crunch_R1">R1:</label>
+																	
+														<input type="number" name="reverse_crunch_R1" id="reverse_crunch_R1" value="0" maxlength="3"  data-theme="a"/>
+											
+													
+
+																<label for="reverse_crunch_R2">R2:</label>
+																	
+														<input type="number" name="reverse_crunch_R2" id="reverse_crunch_R2" value="0" maxlength="3"  data-theme="a"/>
+											
+																
+
+												</div>
+											</div>
+											
+											
+									
+												<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+
+										</div> 
+										<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+						
+						
+						
+					 
+					</div><!--collabsible beginners ends here-->
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Intermediate </h3>
+								
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Double Leg Stretch</h1>	
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#doublelegstretch" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="double_leg_stretch_R1">R1:</label>
+													
+										<input type="number" name="double_leg_stretch_R1" id="double_leg_stretch_R1" value="15" maxlength="3"  data-theme="a"/>
+							
+
+												<label for="double_leg_stretch_R2">R2:</label>
+													
+										<input type="number" name="double_leg_stretch_R2" id="double_leg_stretch_R2" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\doublelegstretch.jpg" alt="double_leg_stretch" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Single Straight Leg</h1>
+										<a data-role="button" 
+										data-inline="false" 
+										data-transition="flip"
+										data-theme="a"
+										href="#singlestraight" 
+										data-rel="dialog" 
+										Info - data-icon="info"
+										data-iconpos="notext"
+										class="ui-btn-right">
+										</a>
+									
+								</div>
+							 </div>        <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="single_straight_leg_R1">R1:</label>
+													
+										<input type="number" name="single_straight_leg_R1" id="single_straight_leg_R1" value="20" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="single_straight_leg_R2">R2:</label>
+													
+										<input type="number" name="single_straight_leg_R2" id="single_straight_leg_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\singlestraightleg.jpg" alt="single_straight_leg" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+								<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Leg Raises</h1>
+													<a data-role="button" 
+													data-inline="false" 
+													data-transition="flip"
+													data-theme="a"
+													href="#legraises" 
+													data-rel="dialog" 
+													Info - data-icon="info"
+													data-iconpos="notext"
+													class="ui-btn-right">
+													</a>
+									
+								</div>
+							</div>         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="leg_raises_R1">R1:</label>
+													
+										<input type="number" name="leg_raises_R1" id="leg_raises_R1" value="12" maxlength="3"  data-theme="a"/>
+								
+									
+
+												<label for="leg_raises_R2">R2:</label>
+													
+										<input type="number" name="leg_raises_R2" id="leg_raises_R2" value="12" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="a">
+										<h1>Bicycle</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#bicycle" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											</a>
+									
+									</div>
+							    </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="bicycle_R1">R1:</label>
+													
+										<input type="number" name="bicycle_R1" id="bicycle_R1" value="20" maxlength="3"  data-theme="a"/>
+						
+									
+
+												<label for="bicycle_R2">R2:</label>
+													
+										<input type="number" name="bicycle_R2" id="bicycle_R2" value="20" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+
+						</div> 
+							
+								
+					</div>	
+					
+					<div data-role="collapsible" data-inset="false" >
+								<h3>Advanced </h3>
+																<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Sit Up With Medicine Ball</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#situpmedicine" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="sit_up_medicine_ball_R1">R1:</label>
+													
+										<input type="number" name="sit_up_medicine_ball_R1" id="sit_up_medicine_ball_R1" value="15" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="sit_up_medicine_ball_R2">R2:</label>
+													
+										<input type="number" name="sit_up_medicine_ball_R2" id="sit_up_medicine_ball_R2" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\situpball.jpg" alt="sit_up_medicine_ball" class="exercise" />
+
+						</div> 
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+									<h1>Oblique Crunches</h1>
+							
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#obliquecrunches" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="oblique_crunches_R1">R1:</label>
+													
+										<input type="number" name="oblique_crunches_R1" id="oblique_crunches_R1" value="40" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="oblique_crunches_R2">R2:</label>
+													
+										<input type="number" name="oblique_crunches_R2" id="oblique_crunches_R2" value="40" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+							
+							
+					
+								<img src="img\abs\sideobliquecrunch.jpg" alt="oblique_crunches" class="exercise" />
+
+						</div> 
+						
+						
+						<div class="position1">
+							<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>Side Plank</h1>
+							
+								
+									
+									<a data-role="button" 
+									data-inline="false" 
+									data-transition="flip"
+									data-theme="a"
+									href="#sideplank" 
+									data-rel="dialog" 
+									Info - data-icon="info"
+									data-iconpos="notext"
+									class="ui-btn-right">
+									</a>
+									
+							</div>
+						</div>	         <!-- button end-->
+				
+				
+					<div data-role="fieldcontain" >
+					
+							
+									<div>
+										
+							
+
+										<label for="side_plank_t1l">T1L:</label>
+													
+										<input type="number" name="side_plank_t1l" id="side_plank_t1l" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="side_plank_R2">T1R:</label>
+													
+										<input type="number" name="side_plank_t1r" id="side_plank_t1r" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+									
+									<div>
+										
+							
+
+										<label for="side_plank_t2l">T2L:</label>
+													
+										<input type="number" name="side_plank_t2l" id="side_plank_t2l" value="0" maxlength="3"  data-theme="a"/>
+							
+								
+							
+
+												<label for="side_plank_t2r">T2R:</label>
+													
+										<input type="number" name="side_plank_t2r" id="side_plank_t2r" value="0" maxlength="3"  data-theme="a"/>
+							
+
+									</div>
+								
+								
+					
+
+							
+						
+				
+							<img src="img\abs\sideplank.jpg" alt="plank" class="exercise" />
+
+					</div>
+						<a data-role="button" href="#popup2" data-rel="popup" data-inline="true">Timer</a>
+								
+								<div class="position1">
+									<div data-role="header" data-fullscreen="true" data-theme="d">
+										<h1>V Ups</h1>
+											<a data-role="button" 
+											data-inline="false" 
+											data-transition="flip"
+											data-theme="a"
+											href="#vups" 
+											data-rel="dialog" 
+											Info - data-icon="info"
+											data-iconpos="notext"
+											class="ui-btn-right">
+											 </a>
+									
+									</div>
+							     </div>    <!-- button end-->
+				
+				
+						<div data-role="fieldcontain" >
+						
+
+								<div>
+									<div>
+										
+
+										<label for="v_ups_R1">R1:</label>
+													
+										<input type="number" name="v_ups_R1" id="v_ups_R1" value="15" maxlength="3"  data-theme="a"/>
+							
+									
+
+												<label for="v_ups_R2">R2:</label>
+													
+										<input type="number" name="v_ups_R2" id="v_ups_R2" value="15" maxlength="3"  data-theme="a"/>
+							
+												
+
+								</div>
+							</div>
+						
+						
+								<img src="img\abs\v_ups.jpg" alt="v_ups" class="exercise" />
+
+						</div> 
+						
+						
+								
+					</div>		
+					
+				</div><!--Rutinas 5 Ends here-->
+			
+			
+			</div><!--content end-->
+		
+		</div><!--page-->	
+		
+<!--Hanging Ab Straps-->
+								<div data-role="page"
+									id="abstraps"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Hanging Ab Straps</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+								<img src="img\abs\abskneetucks.jpg" alt="hanging_ab_straps" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/kneehangingab.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Dialog Bicycle-->
+								<div data-role="page"
+									id="bicycle"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Bicycle</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\abs\bicycle.jpg" alt="bicycle" class="exercise" />
+										<p>
+										
+										Lie on your back with
+										your hands behind your
+										head and your knees
+										toward your chest in
+										a 45 degree angle.
+										Make a pedaling motion
+										with your legs, touching
+										your right elbow to
+										your left knee, then
+										your left elbow to your
+										left knee in a continuous
+										motion.
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/bicycle.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Dialog Crunch-->
+								<div data-role="page"
+									id="crunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Crunches</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\abs\crunch.jpg" alt="Crunches" class="exercise" />
+										<p>Lie on your back with
+										your legs in the air and
+										your knees bent, your
+										hands behind your head
+										and elbows out to the
+										sides. Curl your upper
+										body toward your
+										knees by contracting
+										your abs, pulling them
+										tightly inward. Return
+										with control to starting
+										position.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/crunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Dialog stability ball crunch-->
+								<div data-role="page"
+									id="stabilityballcrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Stability Ball Crunch</h1>
+									</div>
+									<div data-role="content" >
+									<img src="img\abs\crunchwithball.jpg" alt="stability_ball_crunch" class="exercise" />
+									
+										<p> </p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/crunchwithball.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Dialog Medicine Ball Crunch-->
+								<div data-role="page"
+									id="medicinecrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Medicine Ball Crunch</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\abs\crunchwithball1.jpg" alt="medicine_ball_crunch" class="exercise" />
+										<p>
+										
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/crunchmedicineball.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Dialog Double leg stretch-->
+								<div data-role="page"
+									id="doublelegstretch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Double Leg Stretch</h1>
+									</div>
+									<div data-role="content" >
+									<img src="img\abs\doublelegstretch.jpg" alt="Double_Leg_Stretch" class="exercise" />
+									
+										<p> Exhale, Lie on your back with your shins in table top position, parallel to the floor.Deepen the abs, bringing your forehead toward your knees.
+												Grasp your shins.
+										 Inhale, reaching arms back and overhead as you extend legs at a 45 degree angle to the floor.</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/doubleleg.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+
+<!--Dialog Double leg stretch with medicine ball-->
+								<div data-role="page"
+									id="doublelegstretchmedicine"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Double Leg Stretch with Medicine</h1>
+									</div>
+									<div data-role="content" >
+									<img src="img\abs\doublelegstretchmedicine.jpg" alt="Double_Leg_Stretch_medicine_ball" class="exercise" />
+									
+										<p> </p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/doublelegmedicineball.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Dialog Elbow to knee Oblique Crunch-->
+								<div data-role="page"
+									id="kneeobliquecrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Elbow to Knee Oblique Crunch</h1>
+									</div>
+									<div data-role="content" >
+									<img src="img\abs\obliquecrunch.jpg" alt="elbow_to_knee_oblique_crunch" class="exercise" />
+									
+										<p> 
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/kneeobliquecrunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+
+								
+<!--Dialog Reverse Crunch-->
+								<div data-role="page"
+									id="reversecrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Reverse Crunch</h1>
+									</div>
+									<div data-role="content" 
+									>
+									<img src="img\abs\reversecrunch.jpg" alt="reverse_crunch" class="exercise" />
+										<p>
+										
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/reversecrunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+								
+<!--Dialog Leg Raises-->
+								<div data-role="page"
+									id="legraises"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Leg Raises</h1>
+									</div>
+									<div data-role="content" 
+									>
+								<img src="img\abs\legraises.jpg" alt="leg_raises" class="exercise" />
+										<p>
+										
+										
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/legraises.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+																
+								
+<!--Straight Leg Reverse Crunch-->
+								<div data-role="page"
+									id="slreversecrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Straight Leg Reverse Crunch</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+								<img src="img\abs\legsover.jpg" alt="straight_leg_reverse_crunch " class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/legsover.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Oblique Crunches-->
+								<div data-role="page"
+									id="obliquecrunches"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Oblique Crunches</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\sideobliquecrunch.jpg" alt="oblique_crunches" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/obliquecrunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--plank-->
+								<div data-role="page"
+									id="plank"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Plank</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\plank.jpg" alt="plank" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/plank.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+
+
+								
+
+								
+<!--Russian Twist feet on floor-->
+								<div data-role="page"
+									id="russiantwist"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Russian Twist Feet on Floor</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\russiantwist.jpg" alt="russian_twist" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/russiantwist.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Russian Twist feet on Air-->
+								<div data-role="page"
+									id="russiantwistfeet"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Russian Twist Feet on Air</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\russiantwistfeet.jpg" alt="russian_twist" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/russiantwist1.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+
+<!--Elbow to knee obliquecrunch-->
+								<div data-role="page"
+									id="obliquecrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Elbow to knee Oblique Crunch</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\obliquecrunch.jpg" alt="elbow_to_knee_crucnh" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/kneeobliquecrunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Side Plank-->
+								<div data-role="page"
+									id="sideplank"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Side Plank</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\sideplank.jpg" alt="side_plank" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/sideplank.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Single straight leg-->
+								<div data-role="page"
+									id="singlestraight"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Single Straight Leg</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\singlestraightleg.jpg" alt="single_straight_leg" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/singlelegstraight.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+<!--Sit Up with Medicine Ball-->
+								<div data-role="page"
+									id="situpmedicine"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sit Up with Medicine Ball</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\situpball.jpg" alt="sit_up_with_medicine_ball" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/situpmedicineball.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--ball reach up-->
+								<div data-role="page"
+									id="ballreachup"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Ball Reach Up</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\situpswissball.jpg" alt="sit_up_swiss_ball" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/reachup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Sit Ups on Bench-->
+								<div data-role="page"
+									id="situpsbench"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Sit Ups on Bench</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\situpsbench.jpg" alt="sit_ups_on_bench" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/situpsbench.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>	
+
+<!--Reverse crunch on Bench-->
+								<div data-role="page"
+									id="reversecrunchonbench"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Reverse Crunch on Bench</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\reversecrunchbench.jpg" alt="reverse_crunch-bench" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/situpsbench.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>																
+
+<!--Wind Shields-->
+								<div data-role="page"
+									id="windshields"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Wind Shields</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\windshield.jpg" alt="wind_shields" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/windshields.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Corck Screw-->
+								<div data-role="page"
+									id="corkscrew"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Corck Screw</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\core\corckscrew.jpg" alt="corc_screw" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/corkscrew.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Plank Superman-->
+								<div data-role="page"
+									id="planksuperman"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Plank Superman</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\core\planksuperman.jpg" alt="plank_superman" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/superman.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Push up planl-->
+								<div data-role="page"
+									id="Push Up Plank"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Push Up plank</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\core\pushupplank.jpg" alt="push_up_plank" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/core/pushupplank.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>		
+
+<!--Roll Ups-->
+								<div data-role="page"
+									id="rollups"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Roll Ups</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\core\rollups.jpg" alt="roll_ups" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/rollup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Star Crunch-->
+								<div data-role="page"
+									id="starcrunch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Star Crunch</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\starcrunch.jpg" alt="star_crunch" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/starcrunch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Toe Touch Crunches-->
+								<div data-role="page"
+									id="toetouch"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Toe Touch Crunches</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\toetouch.jpg" alt="toe_touch" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/toetouch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>																												
+								
+<!--Cable Chops with Ball-->
+								<div data-role="page"
+									id="cablechops"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Cable Chops with Ball</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\toetouch.jpg" alt="cable_chops_with_ball" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/toetouch.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--V Ups-->
+								<div data-role="page"
+									id="vups"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>V Ups</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									
+									<img src="img\abs\vups.jpg" alt="v_ups" class="exercise" />
+										<p>
+										
+									
+										</p>
+										
+										
+										
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/abs/vup.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+
+<!--Dialog Climbers-->
+								<div data-role="page"
+									id="climbers"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Climbers</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\climbers.jpg" alt="climbers" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/climbers.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>
+								
+<!--Frog Thrusts-->
+								<div data-role="page"
+									id="frogthrusts"
+									data-theme="k"
+									>
+									<div data-role="header" data-theme="k">
+										<h1>Frog Thrusts</h1>
+									</div>
+									<div data-role="content" 
+									>
+									
+									<img src="img\tabata\frogs.jpg" alt="frog_thrusts" class="exercise" />
+										<p>
+										
+										</p>
+										
+										<button data-theme="a" data-inline="true"    onclick="playVideo('file:///android_asset/www/video/tabata/frogthrusts.mp4')">Video</button>
+											<a href="#"
+											data-role="button"
+											data-inline="true"
+											data-rel="back"
+											data-theme="k"
+										>cancel</a>
+									</div>
+								</div>								
+								
+								
+								
+								
+								<div data-role="page" id="adv6" data-add-back-btn="true" data-theme="b">
+									<div data-role="header" data-position="fixed" data-theme="b" >
+										<h3>
+											Abs
+										</h3>
+									</div>
+									<div data-role="content">
+										
+										<ul data-role="listview"   data-inset="true"  data-divider-theme="b" >
+											<li data-role="list-divider">
+											<h2>Abs</h2>
+											
+											</li>
+											<li data-theme="c" data-icon="arrow-r" >
+											   <a  onclick="playVideo('http://www.latinotrainer.com/backrow.mp4')">
+												
+												
+												<img src="img/absbeginner.jpg"/>
+												<h2>Beginner</h2>
+												<p>Video aprox.5min</p> </a>
+												
+											</li>
+											
+											<li data-theme="c"   data-icon="arrow-r" >
+											 <a  onclick="playVideo('file:///extsdcard/intermediateabs.mp4')">
+											<img src="img/absintermediate.jpg"/>
+											<h2>Intermediate</h2>
+											<p>Video aprox. 4min</p></a>
+											</li>
+											
+											<li data-theme="c"  data-icon="arrow-r" >
+											 <a  onclick="playVideo('file:///android_asset/www/video/workouts/intermediateabs.mp4')"> 
+											<img src="img/absadvanced.jpg"/>
+											<h2>Advanced</h2>
+											<p>Video aprox:4min</p></a>
+											</li>
+									</ul>
+										
+										
+									</div>
+									
+								</div>
+								
+								
+	</body>
+</html>		 								
